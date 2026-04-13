@@ -1,0 +1,25 @@
+{
+  "manifest_version": 3,
+  "name": "Tagstash for Firefox",
+  "version": "0.1.0",
+  "description": "Save the current tab directly to your local Tagstash instance.",
+  "permissions": ["storage", "tabs", "activeTab", "scripting"],
+  "host_permissions": [
+    "http://localhost:5000/*",
+    "http://127.0.0.1:5000/*",
+    "https://tagstash.pages.dev/*"
+  ],
+  "action": {
+    "default_title": "Save to Tagstash",
+    "default_popup": "popup.html"
+  },
+  "options_ui": {
+    "page": "options.html",
+    "open_in_tab": true
+  },
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "tagstash-extension@local"
+    }
+  }
+}

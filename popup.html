@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tagstash</title>
+    <link rel="stylesheet" href="popup.css" />
+  </head>
+  <body>
+    <main class="popup-shell">
+      <header class="hero">
+        <p class="eyebrow">Firefox Extension</p>
+        <h1>Tagstash</h1>
+        <p class="hero-copy">Save the current tab into your local Tagstash library without leaving the page.</p>
+      </header>
+
+      <section id="message" class="message" hidden></section>
+
+      <section id="authView" class="panel">
+        <div class="panel-heading">
+          <h2>Sign in</h2>
+          <a class="panel-link" href="options.html" target="_blank" rel="noreferrer">Settings</a>
+        </div>
+        <form id="loginForm" class="form-stack">
+          <label>
+            <span>Email</span>
+            <input id="email" name="email" type="email" autocomplete="username" required />
+          </label>
+          <label>
+            <span>Password</span>
+            <input id="password" name="password" type="password" autocomplete="current-password" required />
+          </label>
+          <button id="loginButton" type="submit">Sign in to Tagstash</button>
+        </form>
+      </section>
+
+      <section id="saveView" class="panel" hidden>
+        <div class="panel-heading">
+          <div>
+            <p class="panel-kicker">Connected</p>
+            <h2 id="userLabel">Signed in</h2>
+          </div>
+          <button id="logoutButton" class="ghost-button" type="button">Log out</button>
+        </div>
+
+        <div class="tab-preview">
+          <p class="panel-kicker">Active tab</p>
+          <h3 id="tabTitle">No supported page selected</h3>
+          <p id="tabUrl" class="tab-url"></p>
+        </div>
+
+        <form id="bookmarkForm" class="form-stack">
+          <div class="field-group">
+            <div class="field-header">
+              <label for="bookmarkTitle">Title</label>
+              <button id="fetchTitleButton" class="btn-field-action" type="button">Fetch Title</button>
+            </div>
+            <input id="bookmarkTitle" name="title" type="text" required />
+          </div>
+          <div class="field-group">
+            <div class="field-header">
+              <label for="bookmarkUrl">URL</label>
+              <div class="field-actions">
+                <button id="baseUrlButton" class="btn-field-action" type="button">Base URL</button>
+                <button id="trimUrlButton" class="btn-field-action" type="button">Trim URL</button>
+              </div>
+            </div>
+            <input id="bookmarkUrl" name="url" type="url" required />
+          </div>
+          <div class="field-group">
+            <div class="field-header">
+              <label for="bookmarkDescription">Description</label>
+              <button id="fetchDescriptionButton" class="btn-field-action" type="button">Fetch From Site</button>
+            </div>
+            <textarea id="bookmarkDescription" name="description" rows="2" placeholder="Optional"></textarea>
+          </div>
+          <label>
+            <span>Tags</span>
+            <input id="bookmarkTags" name="tags" type="text" placeholder="design, docs, research" />
+          </label>
+          <button id="saveButton" type="submit">Save Bookmark</button>
+        </form>
+      </section>
+    </main>
+
+    <script type="module" src="popup.js"></script>
+  </body>
+</html>
