@@ -23,5 +23,12 @@
       "id": "tagstash@orboro.net",
       "strict_min_version": "128.0"
     }
+  },
+  "data_collection_permissions": {
+    "required": [
+      "authentication_info",
+      "browsing_history"
+    ],
+    "optional": []
   }
 }
