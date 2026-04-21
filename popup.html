@@ -77,10 +77,14 @@
             </div>
             <textarea id="bookmarkDescription" name="description" rows="2" placeholder="Optional"></textarea>
           </div>
-          <label>
-            <span>Tags</span>
-            <input id="bookmarkTags" name="tags" type="text" placeholder="design, docs, research" />
-          </label>
+          <div class="field-group">
+            <label for="bookmarkTagInput">Tags</label>
+            <div class="tag-input-shell" id="bookmarkTagsField">
+              <div id="bookmarkTagPills" class="tag-pill-list"></div>
+              <input id="bookmarkTagInput" name="tags" type="text" placeholder="Type tag, press comma" />
+            </div>
+            <small>Press Comma, Space, Enter, or Tab to lock in a tag</small>
+          </div>
           <button id="saveButton" type="submit">Save Bookmark</button>
         </form>
       </section>

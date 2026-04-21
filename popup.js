@@ -19,7 +19,8 @@ const elements = {
   bookmarkTitle: document.getElementById('bookmarkTitle'),
   bookmarkUrl: document.getElementById('bookmarkUrl'),
   bookmarkDescription: document.getElementById('bookmarkDescription'),
-  bookmarkTags: document.getElementById('bookmarkTags'),
+  bookmarkTagInput: document.getElementById('bookmarkTagInput'),
+  bookmarkTagPills: document.getElementById('bookmarkTagPills'),
   fetchTitleButton: document.getElementById('fetchTitleButton'),
   fetchDescriptionButton: document.getElementById('fetchDescriptionButton'),
   saveButton: document.getElementById('saveButton'),
@@ -33,6 +34,7 @@ const state = {
   user: null,
   activeTab: null,
   existingBookmarkId: null,
+  tagList: [],
 };
 
 function setBusy(button, isBusy, label) {
@@ -75,11 +77,60 @@ function normalizeTags(tagInput) {
   return Array.from(
     new Set(
       tagInput
-        .split(',')
         .map((tag) => tag.trim().toLowerCase())
         .filter(Boolean)
     )
   );
+}
+
+function renderTagPills() {
+  elements.bookmarkTagPills.innerHTML = '';
+
+  state.tagList.forEach((tag, index) => {
+    const pill = document.createElement('span');
+    pill.className = 'tag-pill';
+
+    const text = document.createElement('span');
+    text.textContent = tag;
+
+    const removeButton = document.createElement('button');
+    removeButton.type = 'button';
+    removeButton.className = 'tag-pill-remove';
+    removeButton.dataset.index = String(index);
+    removeButton.setAttribute('aria-label', `Remove tag ${tag}`);
+    removeButton.textContent = 'x';
+
+    pill.appendChild(text);
+    pill.appendChild(removeButton);
+    elements.bookmarkTagPills.appendChild(pill);
+  });
+}
+
+function setTagList(tags) {
+  state.tagList = normalizeTags(tags);
+  renderTagPills();
+}
+
+function commitTagDraft() {
+  const rawDraft = elements.bookmarkTagInput.value || '';
+  const pendingTags = rawDraft
+    .split(/[\s,]+/)
+        .map((tag) => tag.trim().toLowerCase())
+        .filter(Boolean);
+
+  if (pendingTags.length === 0) {
+    return true;
+  }
+
+  const invalidTag = pendingTags.find((tag) => /\s/.test(tag));
+  if (invalidTag) {
+    showMessage('error', `Tags must be single words. Invalid tag: ${invalidTag}`);
+    return false;
+  }
+
+  setTagList([...state.tagList, ...pendingTags]);
+  elements.bookmarkTagInput.value = '';
+  return true;
 }
 
 function getClient() {
@@ -99,6 +150,8 @@ async function hydrateActiveTab() {
     elements.bookmarkTitle.value = '';
     elements.bookmarkUrl.value = '';
     elements.bookmarkDescription.value = '';
+    setTagList([]);
+    elements.bookmarkTagInput.value = '';
     return;
   }
 
@@ -260,11 +313,14 @@ async function checkExistingBookmark() {
     state.existingBookmarkId = id;
     elements.bookmarkTitle.value = title || '';
     elements.bookmarkDescription.value = description || '';
-    elements.bookmarkTags.value = tags?.map((t) => t.name).join(', ') || '';
+    setTagList((tags || []).map((t) => t.name));
+    elements.bookmarkTagInput.value = '';
     elements.saveButton.textContent = 'Update Bookmark';
   } catch {
     // 404 = not yet saved, or network error — treat as new
     state.existingBookmarkId = null;
+    setTagList([]);
+    elements.bookmarkTagInput.value = '';
   }
 }
 
@@ -272,10 +328,7 @@ async function handleSaveBookmark(event) {
   event.preventDefault();
   clearMessage();
 
-  const tags = normalizeTags(elements.bookmarkTags.value);
-  const invalidTag = tags.find((tag) => /\s/.test(tag));
-  if (invalidTag) {
-    showMessage('error', `Tags must be single words. Invalid tag: ${invalidTag}`);
+  if (!commitTagDraft()) {
     return;
   }
 
@@ -283,7 +336,7 @@ async function handleSaveBookmark(event) {
     title: elements.bookmarkTitle.value.trim(),
     url: elements.bookmarkUrl.value.trim(),
     description: elements.bookmarkDescription.value.trim(),
-    tags,
+    tags: state.tagList,
   };
 
   if (!bookmark.title || !bookmark.url) {
@@ -312,6 +365,32 @@ async function handleSaveBookmark(event) {
   }
 }
 
+function handleTagInputKeyDown(event) {
+  const isDelimiter = event.key === ',' || event.key === 'Enter' || event.key === 'Tab' || event.key === ' ' || event.key === 'Spacebar';
+  if (isDelimiter && elements.bookmarkTagInput.value.trim()) {
+    if (event.key !== 'Tab') {
+      event.preventDefault();
+    }
+    clearMessage();
+    commitTagDraft();
+    return;
+  }
+
+  if (event.key === 'Backspace' && !elements.bookmarkTagInput.value && state.tagList.length > 0) {
+    event.preventDefault();
+    setTagList(state.tagList.slice(0, -1));
+  }
+}
+
+function handleTagPillClick(event) {
+  const removeBtn = event.target.closest('.tag-pill-remove');
+  if (!removeBtn) return;
+  const index = Number(removeBtn.dataset.index);
+  if (!Number.isInteger(index)) return;
+
+  setTagList(state.tagList.filter((_, i) => i !== index));
+}
+
 async function init() {
   await hydrateActiveTab();
   await restoreSession();
@@ -326,6 +405,9 @@ async function init() {
   elements.fetchDescriptionButton.addEventListener('click', handleFetchDescription);
   elements.baseUrlButton.addEventListener('click', handleBaseUrl);
   elements.trimUrlButton.addEventListener('click', handleTrimUrl);
+  elements.bookmarkTagInput.addEventListener('keydown', handleTagInputKeyDown);
+  elements.bookmarkTagInput.addEventListener('blur', commitTagDraft);
+  elements.bookmarkTagPills.addEventListener('click', handleTagPillClick);
   elements.bookmarkForm.addEventListener('submit', handleSaveBookmark);
 }
 
