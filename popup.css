@@ -1,24 +1,26 @@
 :root {
   color-scheme: dark;
-  --bg: #161616;
-  --panel: rgba(89, 89, 89, 0.08);
-  --panel-strong: #1e1e1e;
-  --panel-border: rgba(89, 89, 89, 0.4);
-  --field-bg: rgba(255, 255, 255, 0.05);
-  --field-border: #595959;
-  --text: rgba(220, 224, 217, 0.87);
-  --muted: rgba(220, 224, 217, 0.6);
-  --accent: #6B0F1A;
-  --accent-hover: #8B1A26;
-  --accent-secondary: #808F85;
-  --accent-secondary-border: #595959;
-  --focus-shadow: rgba(128, 143, 133, 0.15);
-  --success-bg: rgba(68, 255, 68, 0.1);
-  --success-text: #44ff44;
-  --error-bg: rgba(255, 68, 68, 0.1);
-  --error-text: #ff7070;
-  --shadow: 0 14px 42px rgba(0, 0, 0, 0.4);
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  --bg: #090914;
+  --panel: rgba(20, 20, 43, 0.86);
+  --panel-strong: #161631;
+  --panel-border: rgba(180, 168, 255, 0.34);
+  --field-bg: rgba(139, 109, 255, 0.08);
+  --field-border: rgba(180, 168, 255, 0.34);
+  --text: #f2efff;
+  --muted: rgba(242, 239, 255, 0.56);
+  --accent: #6d45ff;
+  --accent-hover: #7d5dff;
+  --accent-secondary: #8b6dff;
+  --accent-secondary-border: rgba(180, 168, 255, 0.34);
+  --focus-shadow: rgba(92, 49, 245, 0.2);
+  --success-bg: rgba(103, 215, 162, 0.14);
+  --success-text: #67d7a2;
+  --success-border: rgba(103, 215, 162, 0.3);
+  --error-bg: rgba(255, 95, 123, 0.14);
+  --error-text: #ff8f9e;
+  --error-border: rgba(255, 143, 158, 0.34);
+  --shadow: 0 14px 42px rgba(0, 0, 0, 0.34);
+  font-family: 'Nunito', 'Segoe UI', system-ui, -apple-system, sans-serif;
 }
 
 * {
@@ -29,8 +31,10 @@ body {
   margin: 0;
   min-width: 380px;
   min-height: 100vh;
-  background: var(--bg);
+  background: radial-gradient(circle at top, rgba(109, 69, 255, 0.2), transparent 32%), linear-gradient(180deg, #0f1024 0%, #090914 100%);
   color: var(--text);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 .popup-shell {
@@ -61,7 +65,11 @@ body {
 .hero h1 {
   font-size: 1.6rem;
   line-height: 1;
-  color: #DCE0D9;
+  font-weight: 800;
+  background: linear-gradient(90deg, #8b6dff, #c4b4ff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .hero-copy {
@@ -96,7 +104,7 @@ body {
 }
 
 .panel-link:hover {
-  color: #DCE0D9;
+  color: var(--text);
 }
 
 .form-stack {
@@ -139,6 +147,11 @@ textarea:focus {
   box-shadow: 0 0 0 3px var(--focus-shadow);
 }
 
+input::placeholder,
+textarea::placeholder {
+  color: rgba(242, 239, 255, 0.35);
+}
+
 button {
   border: 0;
   border-radius: 8px;
@@ -147,7 +160,12 @@ button {
   color: white;
   cursor: pointer;
   transition: background-color 0.25s, transform 120ms ease, opacity 120ms ease;
-  font-weight: 500;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  white-space: nowrap;
 }
 
 button:hover {
@@ -171,8 +189,8 @@ button:disabled {
 .secondary-button:hover,
 .ghost-button:hover {
   border-color: var(--accent-secondary);
-  color: #DCE0D9;
-  background: transparent;
+  color: var(--text);
+  background: rgba(139, 109, 255, 0.1);
 }
 
 .button-row {
@@ -265,11 +283,32 @@ button:disabled {
 .message.success {
   background: var(--success-bg);
   color: var(--success-text);
-  border-color: rgba(68, 255, 68, 0.3);
+  border-color: var(--success-border);
 }
 
 .message.error {
   background: var(--error-bg);
   color: var(--error-text);
-  border-color: rgba(255, 68, 68, 0.3);
+  border-color: var(--error-border);
+}
+
+.popup-footer {
+  margin-top: 10px;
+  padding-top: 8px;
+  border-top: 1px solid var(--accent-secondary-border);
+  text-align: center;
+}
+
+.popup-footer a {
+  font-size: 11px;
+  color: var(--muted);
+  text-decoration: none;
+  letter-spacing: 0.04em;
+  opacity: 0.7;
+  transition: opacity 0.2s, color 0.2s;
+}
+
+.popup-footer a:hover {
+  opacity: 1;
+  color: var(--accent-secondary);
 }

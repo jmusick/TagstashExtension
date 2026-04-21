@@ -1,16 +1,18 @@
 :root {
   color-scheme: dark;
-  --bg: #242424;
-  --card: #12172a;
-  --card-border: rgba(100, 108, 255, 0.35);
-  --text: rgba(255, 255, 255, 0.87);
-  --muted: rgba(255, 255, 255, 0.72);
-  --accent: #646cff;
-  --accent-strong: #535bf2;
-  --field-bg: #1b2036;
-  --field-border: rgba(233, 236, 255, 0.28);
-  --shadow: 0 14px 42px rgba(0, 0, 0, 0.45);
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  --bg: #090914;
+  --card: rgba(20, 20, 43, 0.86);
+  --card-border: rgba(180, 168, 255, 0.34);
+  --text: #f2efff;
+  --muted: rgba(242, 239, 255, 0.56);
+  --accent: #6d45ff;
+  --accent-hover: #7d5dff;
+  --accent-strong: #8b6dff;
+  --field-bg: rgba(139, 109, 255, 0.08);
+  --field-border: rgba(180, 168, 255, 0.34);
+  --focus-shadow: rgba(92, 49, 245, 0.2);
+  --shadow: 0 14px 42px rgba(0, 0, 0, 0.34);
+  font-family: 'Nunito', 'Segoe UI', system-ui, -apple-system, sans-serif;
 }
 
 * {
@@ -23,8 +25,10 @@ body {
   display: grid;
   place-items: center;
   padding: 24px;
-  background: var(--bg);
+  background: radial-gradient(circle at top, rgba(109, 69, 255, 0.2), transparent 32%), linear-gradient(180deg, #0f1024 0%, #090914 100%);
   color: var(--text);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 .settings-shell {
@@ -49,14 +53,19 @@ body {
 
 h1 {
   margin: 8px 0 10px;
-  font-size: 2.5rem;
-  color: var(--accent);
+  font-size: 2rem;
+  font-weight: 800;
+  background: linear-gradient(90deg, #8b6dff, #c4b4ff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .intro {
   margin: 0 0 20px;
   color: var(--muted);
-  line-height: 1.5;
+  line-height: 1.6;
+  font-size: 0.95rem;
 }
 
 .settings-form {
@@ -68,6 +77,8 @@ label {
   display: grid;
   gap: 8px;
   color: var(--muted);
+  font-size: 0.9rem;
+  font-weight: 500;
 }
 
 input,
@@ -78,37 +89,44 @@ button {
 input {
   border: 1px solid var(--field-border);
   border-radius: 8px;
-  padding: 13px 14px;
+  padding: 10px 14px;
   background: var(--field-bg);
   color: var(--text);
+  transition: border-color 0.2s, box-shadow 0.2s;
 }
 
 input::placeholder {
-  color: rgba(233, 236, 255, 0.55);
+  color: rgba(242, 239, 255, 0.35);
 }
 
 input:focus {
   outline: none;
-  border-color: var(--accent);
-  box-shadow: 0 0 0 3px rgba(100, 108, 255, 0.1);
+  border-color: var(--accent-strong);
+  box-shadow: 0 0 0 3px var(--focus-shadow);
 }
 
 button {
   justify-self: start;
   border: 0;
   border-radius: 8px;
-  padding: 11px 16px;
+  padding: 9px 20px;
   background: var(--accent);
   color: white;
   cursor: pointer;
-  transition: background-color 0.25s;
+  font-weight: 600;
+  transition: background-color 0.25s, transform 120ms ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
 }
 
 button:hover {
-  background: var(--accent-strong);
+  background: var(--accent-hover);
+  transform: translateY(-1px);
 }
 
 .status-message {
   margin: 16px 0 0;
-  color: var(--accent);
+  font-size: 0.88rem;
+  color: var(--accent-strong);
 }

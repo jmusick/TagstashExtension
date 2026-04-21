@@ -1,17 +1,17 @@
 {
   "manifest_version": 3,
-  "name": "Tagstash",
-  "version": "0.1.0",
-  "description": "Save the current tab to your Tagstash bookmark manager.",
+  "name": "Tagsta.sh",
+  "version": "0.2.0",
+  "description": "Save the current tab to your Tagsta.sh bookmark manager.",
   "permissions": ["storage", "tabs", "activeTab", "scripting"],
   "host_permissions": [
-    "https://tagstash.pages.dev/*"
+    "https://tagsta.sh/*"
   ],
   "optional_host_permissions": [
     "<all_urls>"
   ],
   "action": {
-    "default_title": "Save to Tagstash",
+    "default_title": "Save to Tagsta.sh",
     "default_popup": "popup.html"
   },
   "options_ui": {

@@ -44,7 +44,7 @@ async function handleSubmit(event) {
     await clearSession();
     showStatus('Settings saved. Sign in again in the popup.');
   } catch {
-    showStatus('Enter a valid API base URL, for example https://tagstash.pages.dev/api');
+    showStatus('Enter a valid API base URL, for example https://tagsta.sh/api');
   } finally {
     elements.saveButton.disabled = false;
   }

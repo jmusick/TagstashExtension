@@ -3,15 +3,18 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Tagstash</title>
+    <title>Tagsta.sh</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="popup.css" />
   </head>
   <body>
     <main class="popup-shell">
       <header class="hero">
         <p class="eyebrow">Firefox Extension</p>
-        <h1>Tagstash</h1>
-        <p class="hero-copy">Save the current tab into your local Tagstash library without leaving the page.</p>
+        <h1>Tagsta.sh</h1>
+        <p class="hero-copy">Save the current tab into your local Tagsta.sh library without leaving the page.</p>
       </header>
 
       <section id="message" class="message" hidden></section>
@@ -30,7 +33,7 @@
             <span>Password</span>
             <input id="password" name="password" type="password" autocomplete="current-password" required />
           </label>
-          <button id="loginButton" type="submit">Sign in to Tagstash</button>
+          <button id="loginButton" type="submit">Sign in to Tagsta.sh</button>
         </form>
       </section>
 
@@ -81,6 +84,10 @@
           <button id="saveButton" type="submit">Save Bookmark</button>
         </form>
       </section>
+
+      <footer class="popup-footer">
+        <a href="https://tagsta.sh/" target="_blank" rel="noreferrer">tagsta.sh</a>
+      </footer>
     </main>
 
     <script type="module" src="popup.js"></script>

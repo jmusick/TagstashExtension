@@ -1,6 +1,6 @@
 # Tagstash for Firefox
 
-A Firefox WebExtension that saves the active tab to your [Tagstash](https://tagstash.pages.dev) bookmark manager.
+A Firefox WebExtension that saves the active tab to your [Tagsta.sh](https://tagsta.sh) bookmark manager.
 
 ## What it does
 
@@ -8,7 +8,7 @@ A Firefox WebExtension that saves the active tab to your [Tagstash](https://tags
 - Reads the active browser tab's URL and title
 - Optionally fetches page title and description from the Tagstash metadata endpoint
 - Saves the page as a bookmark with comma-separated tags
-- Works with [tagstash.pages.dev](https://tagstash.pages.dev) or a self-hosted instance
+- Works with [tagsta.sh](https://tagsta.sh) or a self-hosted instance
 
 ## Installation
 
@@ -18,7 +18,7 @@ Or load it temporarily for development (see below).
 
 ## Configuration
 
-By default the extension points to `https://tagstash.pages.dev/api`. To use a self-hosted instance:
+By default the extension points to `https://tagsta.sh/api`. To use a self-hosted instance:
 
 1. Click the extension icon → **Settings** (gear icon)
 2. Enter your API base URL, e.g. `https://your-instance.com/api`
