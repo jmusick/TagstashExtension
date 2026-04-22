@@ -1,7 +1,7 @@
 import { createTagstashClient } from './lib/tagstash-client.js';
 import { getSettings, saveSession, clearSession } from './lib/storage.js';
 
-const browserApi = globalThis.browser;
+const browserApi = globalThis.browser ?? globalThis.chrome;
 
 const elements = {
   authView: document.getElementById('authView'),
@@ -146,7 +146,7 @@ async function hydrateActiveTab() {
 
   if (!tab || !isSupportedUrl(tab.url)) {
     elements.tabTitle.textContent = 'Open an http or https page to save it';
-    elements.tabUrl.textContent = tab?.url || 'Firefox internal pages cannot be saved from the popup.';
+    elements.tabUrl.textContent = tab?.url || 'Browser internal pages cannot be saved from the popup.';
     elements.bookmarkTitle.value = '';
     elements.bookmarkUrl.value = '';
     elements.bookmarkDescription.value = '';

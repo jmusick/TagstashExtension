@@ -1,6 +1,6 @@
 import { DEFAULT_API_BASE_URL, getSettings, saveApiBaseUrl, clearSession } from './lib/storage.js';
 
-const browserApi = globalThis.browser;
+const browserApi = globalThis.browser ?? globalThis.chrome;
 
 const elements = {
   form: document.getElementById('settingsForm'),
