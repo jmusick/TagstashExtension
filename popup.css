@@ -310,6 +310,7 @@ button:disabled {
   align-items: center;
   gap: 4px;
   white-space: nowrap;
+  position: relative;
 }
 
 .btn-field-action:hover {
@@ -323,6 +324,51 @@ button:disabled {
   opacity: 0.4;
   cursor: not-allowed;
   transform: none;
+}
+
+.action-info-inline {
+  position: relative;
+  width: 12px;
+  height: 12px;
+  color: var(--muted);
+  font-size: 10px;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 2px;
+  cursor: help;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.action-info-inline:hover {
+  color: var(--accent-secondary);
+}
+
+.action-info-tooltip {
+  position: absolute;
+  right: -6px;
+  bottom: calc(100% + 6px);
+  min-width: 210px;
+  max-width: 260px;
+  padding: 6px 8px;
+  border-radius: 8px;
+  border: 1px solid var(--panel-border);
+  background: var(--panel-strong);
+  color: var(--text);
+  font-size: 11px;
+  line-height: 1.35;
+  box-shadow: var(--shadow);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  z-index: 20;
+}
+
+.action-info-inline:hover .action-info-tooltip {
+  opacity: 1;
+  visibility: visible;
 }
 
 .tab-preview {

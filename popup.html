@@ -56,7 +56,13 @@
           <div class="field-group">
             <div class="field-header">
               <label for="bookmarkTitle">Title</label>
-              <button id="fetchTitleButton" class="btn-field-action" type="button">Fetch Title</button>
+              <button id="fetchTitleButton" class="btn-field-action" type="button">
+                Fetch Title
+                <span class="action-info-inline" aria-hidden="true">
+                  i
+                  <span class="action-info-tooltip" role="tooltip">Attempts to read page metadata and replace the title field with the page title.</span>
+                </span>
+              </button>
             </div>
             <input id="bookmarkTitle" name="title" type="text" required />
           </div>
@@ -64,8 +70,20 @@
             <div class="field-header">
               <label for="bookmarkUrl">URL</label>
               <div class="field-actions">
-                <button id="baseUrlButton" class="btn-field-action" type="button">Base URL</button>
-                <button id="trimUrlButton" class="btn-field-action" type="button">Trim URL</button>
+                <button id="baseUrlButton" class="btn-field-action" type="button">
+                  Base URL
+                  <span class="action-info-inline" aria-hidden="true">
+                    i
+                    <span class="action-info-tooltip" role="tooltip">Keeps only the site root (protocol + domain), removing all path and query parts. Example: https://example.com/docs/page?ref=nav becomes https://example.com.</span>
+                  </span>
+                </button>
+                <button id="trimUrlButton" class="btn-field-action" type="button">
+                  Trim URL
+                  <span class="action-info-inline" aria-hidden="true">
+                    i
+                    <span class="action-info-tooltip" role="tooltip">Keeps protocol + domain + path, and removes query string and hash fragments. Example: https://example.com/docs/page?ref=nav#intro becomes https://example.com/docs/page.</span>
+                  </span>
+                </button>
               </div>
             </div>
             <input id="bookmarkUrl" name="url" type="url" required />
@@ -73,7 +91,13 @@
           <div class="field-group">
             <div class="field-header">
               <label for="bookmarkDescription">Description</label>
-              <button id="fetchDescriptionButton" class="btn-field-action" type="button">Fetch From Site</button>
+              <button id="fetchDescriptionButton" class="btn-field-action" type="button">
+                Fetch From Site
+                <span class="action-info-inline" aria-hidden="true">
+                  i
+                  <span class="action-info-tooltip" role="tooltip">Attempts to read the page metadata and fill the description field. If a site blocks scraping, this may fail.</span>
+                </span>
+              </button>
             </div>
             <textarea id="bookmarkDescription" name="description" rows="2" placeholder="Optional"></textarea>
           </div>
