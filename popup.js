@@ -292,7 +292,7 @@ async function handleFetchDescription() {
 function handleBaseUrl() {
   try {
     const u = new URL(elements.bookmarkUrl.value);
-    elements.bookmarkUrl.value = u.origin + '/';
+    elements.bookmarkUrl.value = u.origin;
   } catch {}
 }
 
