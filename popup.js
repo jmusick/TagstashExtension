@@ -70,7 +70,25 @@ function toggleView(isAuthenticated) {
 }
 
 function isSupportedUrl(url) {
-  return /^https?:\/\//i.test(url || '');
+  try {
+    const parsed = new URL(url || '');
+    return parsed.protocol === 'http:' || parsed.protocol === 'https:';
+  } catch {
+    return false;
+  }
+}
+
+function normalizeBookmarkUrl(value) {
+  const raw = (value || '').trim();
+  if (!raw) return '';
+  if (/^https?:\/\//i.test(raw)) return raw;
+
+  const cleaned = raw
+    .replace(/^https?:/i, '')
+    .replace(/^\/\//, '')
+    .trim();
+
+  return cleaned ? `https://${cleaned}` : '';
 }
 
 function normalizeTags(tagInput) {
@@ -251,11 +269,12 @@ async function handleFetchTitle() {
       return;
     }
     const url = elements.bookmarkUrl.value.trim();
-    if (!isSupportedUrl(url)) {
+    const normalizedUrl = normalizeBookmarkUrl(url);
+    if (!isSupportedUrl(normalizedUrl)) {
       showMessage('error', 'Enter a valid URL first.');
       return;
     }
-    const response = await getClient().fetchMetadata(url);
+    const response = await getClient().fetchMetadata(normalizedUrl);
     if (response.title) elements.bookmarkTitle.value = response.title;
     else showMessage('error', 'No title found for this page.');
   } catch (error) {
@@ -275,11 +294,12 @@ async function handleFetchDescription() {
       return;
     }
     const url = elements.bookmarkUrl.value.trim();
-    if (!isSupportedUrl(url)) {
+    const normalizedUrl = normalizeBookmarkUrl(url);
+    if (!isSupportedUrl(normalizedUrl)) {
       showMessage('error', 'Enter a valid URL first.');
       return;
     }
-    const response = await getClient().fetchMetadata(url);
+    const response = await getClient().fetchMetadata(normalizedUrl);
     if (response.description) elements.bookmarkDescription.value = response.description;
     else showMessage('error', 'No description found for this page.');
   } catch (error) {
@@ -291,24 +311,24 @@ async function handleFetchDescription() {
 
 function handleBaseUrl() {
   try {
-    const u = new URL(elements.bookmarkUrl.value);
+    const u = new URL(normalizeBookmarkUrl(elements.bookmarkUrl.value));
     elements.bookmarkUrl.value = u.origin;
   } catch {}
 }
 
 function handleTrimUrl() {
   try {
-    const u = new URL(elements.bookmarkUrl.value);
+    const u = new URL(normalizeBookmarkUrl(elements.bookmarkUrl.value));
     elements.bookmarkUrl.value = u.origin + u.pathname;
   } catch {}
 }
 
 async function checkExistingBookmark() {
-  const url = elements.bookmarkUrl.value.trim();
-  if (!url || !isSupportedUrl(url)) return;
+  const normalizedUrl = normalizeBookmarkUrl(elements.bookmarkUrl.value.trim());
+  if (!normalizedUrl || !isSupportedUrl(normalizedUrl)) return;
 
   try {
-    const result = await getClient().findByUrl(url);
+    const result = await getClient().findByUrl(normalizedUrl);
     const { id, title, description, tags } = result.bookmark;
     state.existingBookmarkId = id;
     elements.bookmarkTitle.value = title || '';
@@ -334,7 +354,7 @@ async function handleSaveBookmark(event) {
 
   const bookmark = {
     title: elements.bookmarkTitle.value.trim(),
-    url: elements.bookmarkUrl.value.trim(),
+    url: normalizeBookmarkUrl(elements.bookmarkUrl.value.trim()),
     description: elements.bookmarkDescription.value.trim(),
     tags: state.tagList,
   };
