@@ -263,6 +263,17 @@ button:disabled {
   background: rgba(255, 255, 255, 0.4);
 }
 
+.tag-input-suggestion {
+  margin-top: 4px;
+  font-size: 11px;
+  color: var(--muted);
+}
+
+.tag-input-suggestion strong {
+  color: var(--accent-secondary);
+  font-weight: 700;
+}
+
 #bookmarkTagInput {
   border: none;
   background: transparent;

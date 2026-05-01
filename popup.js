@@ -21,6 +21,7 @@ const elements = {
   bookmarkDescription: document.getElementById('bookmarkDescription'),
   bookmarkTagInput: document.getElementById('bookmarkTagInput'),
   bookmarkTagPills: document.getElementById('bookmarkTagPills'),
+  tagInputSuggestion: document.getElementById('tagInputSuggestion'),
   fetchTitleButton: document.getElementById('fetchTitleButton'),
   fetchDescriptionButton: document.getElementById('fetchDescriptionButton'),
   saveButton: document.getElementById('saveButton'),
@@ -35,6 +36,7 @@ const state = {
   activeTab: null,
   existingBookmarkId: null,
   tagList: [],
+  allTagNames: [],
 };
 
 function setBusy(button, isBusy, label) {
@@ -158,6 +160,18 @@ function getClient() {
   });
 }
 
+async function loadAllTagNames() {
+  try {
+    const response = await getClient().getAllTags();
+    state.allTagNames = (response.tags || [])
+      .map((t) => (t.name || t).trim().toLowerCase())
+      .filter(Boolean)
+      .sort((a, b) => a.localeCompare(b));
+  } catch {
+    state.allTagNames = [];
+  }
+}
+
 async function hydrateActiveTab() {
   const [tab] = await browserApi.tabs.query({ active: true, currentWindow: true });
   state.activeTab = tab || null;
@@ -221,6 +235,7 @@ async function handleLogin(event) {
     elements.userLabel.textContent = response.user.username;
     elements.password.value = '';
     toggleView(true);
+    await loadAllTagNames();
     showMessage('success', 'Signed in. Save the current tab when ready.');
   } catch (error) {
     showMessage('error', error.message || 'Unable to sign in');
@@ -385,14 +400,49 @@ async function handleSaveBookmark(event) {
   }
 }
 
+function getSuggestedTag(draft) {
+  const normalized = draft.trim().toLowerCase();
+  if (!normalized) return null;
+
+  const lockedSet = new Set(state.tagList);
+
+  const exact = state.allTagNames.find((t) => t === normalized && !lockedSet.has(t));
+  if (exact) return exact;
+
+  return state.allTagNames.find((t) => t.startsWith(normalized) && !lockedSet.has(t)) || null;
+}
+
+function updateTagSuggestion() {
+  const draft = elements.bookmarkTagInput.value || '';
+  const suggestion = getSuggestedTag(draft);
+  if (suggestion) {
+    elements.tagInputSuggestion.hidden = false;
+    elements.tagInputSuggestion.querySelector('strong').textContent = suggestion;
+  } else {
+    elements.tagInputSuggestion.hidden = true;
+  }
+}
+
 function handleTagInputKeyDown(event) {
-  const isDelimiter = event.key === ',' || event.key === 'Enter' || event.key === 'Tab' || event.key === ' ' || event.key === 'Spacebar';
-  if (isDelimiter && elements.bookmarkTagInput.value.trim()) {
-    if (event.key !== 'Tab') {
+  if (event.key === 'Tab') {
+    const draft = elements.bookmarkTagInput.value || '';
+    const suggestion = getSuggestedTag(draft);
+    if (suggestion) {
       event.preventDefault();
+      clearMessage();
+      elements.bookmarkTagInput.value = suggestion;
+      commitTagDraft();
+      updateTagSuggestion();
     }
+    return;
+  }
+
+  const isDelimiter = event.key === ',' || event.key === 'Enter' || event.key === ' ' || event.key === 'Spacebar';
+  if (isDelimiter && elements.bookmarkTagInput.value.trim()) {
+    event.preventDefault();
     clearMessage();
     commitTagDraft();
+    updateTagSuggestion();
     return;
   }
 
@@ -417,6 +467,7 @@ async function init() {
 
   if (state.token) {
     await checkExistingBookmark();
+    await loadAllTagNames();
   }
 
   elements.loginForm.addEventListener('submit', handleLogin);
@@ -426,6 +477,7 @@ async function init() {
   elements.baseUrlButton.addEventListener('click', handleBaseUrl);
   elements.trimUrlButton.addEventListener('click', handleTrimUrl);
   elements.bookmarkTagInput.addEventListener('keydown', handleTagInputKeyDown);
+  elements.bookmarkTagInput.addEventListener('input', updateTagSuggestion);
   elements.bookmarkTagInput.addEventListener('blur', commitTagDraft);
   elements.bookmarkTagPills.addEventListener('click', handleTagPillClick);
   elements.bookmarkForm.addEventListener('submit', handleSaveBookmark);
