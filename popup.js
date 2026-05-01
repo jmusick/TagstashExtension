@@ -437,7 +437,7 @@ function handleTagInputKeyDown(event) {
     return;
   }
 
-  const isDelimiter = event.key === ',' || event.key === 'Enter' || event.key === ' ' || event.key === 'Spacebar';
+  const isDelimiter = event.key === ',' || event.key === ' ' || event.key === 'Spacebar';
   if (isDelimiter && elements.bookmarkTagInput.value.trim()) {
     event.preventDefault();
     clearMessage();
