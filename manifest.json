@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Tagsta.sh",
-  "version": "1.2.2",
+  "version": "1.2.3",
   "description": "Save the current tab to your Tagsta.sh bookmark manager.",
   "permissions": [
     "storage", "tabs", "activeTab", "scripting"
@@ -14,7 +14,12 @@
   ],
   "action": {
     "default_title": "Save to Tagsta.sh",
-    "default_popup": "popup.html"
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icons/icon-16.png",
+      "48": "icons/icon-48.png",
+      "128": "icons/icon-128.png"
+    }
   },
   "options_ui": {
     "page": "options.html",
@@ -43,13 +48,5 @@
       "128": "icons/icon-128.png"
     },
     "default_panel": "sidebar.html"
-  },
-  "action": {
-    "default_popup": "popup.html",
-    "default_icon": {
-      "16": "icons/icon-16.png",
-      "48": "icons/icon-48.png",
-      "128": "icons/icon-128.png"
-    }
   }
 }
