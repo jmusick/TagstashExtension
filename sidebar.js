@@ -23,10 +23,34 @@ document.addEventListener("DOMContentLoaded", async () => {
   let sortMode = 'count'; // 'count' | 'alpha'
   let tags = [];
   let bookmarksByTag = new Map();
+  let starredBookmarks = [];
 
-  function buildTagItem(tag) {
+  function buildBookmarkItem(bookmark) {
+    const bookmarkItem = document.createElement("li");
+    bookmarkItem.classList.add("bookmark-item");
+
+    if (bookmark.favicon_url) {
+      const favicon = document.createElement("img");
+      favicon.src = bookmark.favicon_url;
+      favicon.classList.add("bookmark-favicon");
+      favicon.width = 16;
+      favicon.height = 16;
+      bookmarkItem.appendChild(favicon);
+    }
+
+    const link = document.createElement("a");
+    link.href = bookmark.url;
+    link.textContent = bookmark.title;
+    link.target = "_blank";
+    link.rel = "noopener noreferrer";
+    bookmarkItem.appendChild(link);
+    return bookmarkItem;
+  }
+
+  function buildTagItem(tag, starred = false) {
     const tagItem = document.createElement("li");
     tagItem.classList.add("tag-folder");
+    if (starred) tagItem.classList.add("tag-folder--starred");
 
     const header = document.createElement("div");
     header.classList.add("tag-folder-header");
@@ -34,17 +58,23 @@ document.addEventListener("DOMContentLoaded", async () => {
     const arrow = document.createElement("span");
     arrow.classList.add("tag-arrow");
     arrow.textContent = "▶";
+    header.appendChild(arrow);
+
+    if (starred) {
+      const star = document.createElement("span");
+      star.classList.add("pinned-star");
+      star.textContent = "★";
+      header.appendChild(star);
+    }
 
     const tagLabel = document.createElement("span");
     tagLabel.classList.add("tag-label");
     tagLabel.textContent = tag.name;
+    header.appendChild(tagLabel);
 
     const tagCount = document.createElement("span");
     tagCount.classList.add("tag-count");
     tagCount.textContent = tag.count;
-
-    header.appendChild(arrow);
-    header.appendChild(tagLabel);
     header.appendChild(tagCount);
 
     const bookmarksList = document.createElement("ul");
@@ -53,25 +83,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     const tagBookmarks = bookmarksByTag.get(tag.name) || [];
     for (const bookmark of tagBookmarks) {
-      const bookmarkItem = document.createElement("li");
-      bookmarkItem.classList.add("bookmark-item");
-
-      if (bookmark.favicon_url) {
-        const favicon = document.createElement("img");
-        favicon.src = bookmark.favicon_url;
-        favicon.classList.add("bookmark-favicon");
-        favicon.width = 16;
-        favicon.height = 16;
-        bookmarkItem.appendChild(favicon);
-      }
-
-      const link = document.createElement("a");
-      link.href = bookmark.url;
-      link.textContent = bookmark.title;
-      link.target = "_blank";
-      link.rel = "noopener noreferrer";
-      bookmarkItem.appendChild(link);
-      bookmarksList.appendChild(bookmarkItem);
+      bookmarksList.appendChild(buildBookmarkItem(bookmark));
     }
 
     header.addEventListener("click", (e) => {
@@ -86,23 +98,96 @@ document.addEventListener("DOMContentLoaded", async () => {
     return tagItem;
   }
 
-  function getSortedTags() {
-    const sorted = [...tags];
+  function buildStarredBookmarksSection() {
+    if (starredBookmarks.length === 0) return null;
+
+    const item = document.createElement("li");
+    item.classList.add("tag-folder", "tag-folder--starred");
+
+    const header = document.createElement("div");
+    header.classList.add("tag-folder-header");
+
+    const arrow = document.createElement("span");
+    arrow.classList.add("tag-arrow");
+    arrow.textContent = "▶";
+    header.appendChild(arrow);
+
+    const star = document.createElement("span");
+    star.classList.add("pinned-star");
+    star.textContent = "★";
+    header.appendChild(star);
+
+    const label = document.createElement("span");
+    label.classList.add("tag-label");
+    label.textContent = "Starred Bookmarks";
+    header.appendChild(label);
+
+    const count = document.createElement("span");
+    count.classList.add("tag-count");
+    count.textContent = starredBookmarks.length;
+    header.appendChild(count);
+
+    const list = document.createElement("ul");
+    list.classList.add("bookmarks-list");
+    list.hidden = true;
+
+    for (const bookmark of starredBookmarks) {
+      list.appendChild(buildBookmarkItem(bookmark));
+    }
+
+    header.addEventListener("click", () => {
+      const isOpen = !list.hidden;
+      list.hidden = isOpen;
+      item.classList.toggle("open", !isOpen);
+    });
+
+    item.appendChild(header);
+    item.appendChild(list);
+    return item;
+  }
+
+  function getSortedTags(tagList) {
+    const sorted = [...tagList];
     if (sortMode === 'alpha') {
       sorted.sort((a, b) => a.name.localeCompare(b.name));
+    } else {
+      sorted.sort((a, b) => b.count - a.count);
     }
-    // 'count' order comes from the API already sorted
     return sorted;
   }
 
   function renderTags() {
     tagsList.innerHTML = '';
-    const sorted = getSortedTags();
-    if (sorted.length === 0) {
+
+    const starredTags = tags.filter(t => Boolean(t.is_favorite));
+    const regularTags = tags.filter(t => !Boolean(t.is_favorite));
+
+    const hasPinned = starredBookmarks.length > 0 || starredTags.length > 0;
+    const hasRegular = regularTags.length > 0;
+
+    if (!hasPinned && !hasRegular) {
       tagsList.innerHTML = '<li class="empty-state">No tags yet. Save some bookmarks first!</li>';
       return;
     }
-    for (const tag of sorted) {
+
+    // Starred bookmarks section
+    const starredBookmarksEl = buildStarredBookmarksSection();
+    if (starredBookmarksEl) tagsList.appendChild(starredBookmarksEl);
+
+    // Starred tags
+    for (const tag of getSortedTags(starredTags)) {
+      tagsList.appendChild(buildTagItem(tag, true));
+    }
+
+    // Divider between pinned and regular
+    if (hasPinned && hasRegular) {
+      const divider = document.createElement("li");
+      divider.classList.add("tags-section-divider");
+      tagsList.appendChild(divider);
+    }
+
+    // Regular tags
+    for (const tag of getSortedTags(regularTags)) {
       tagsList.appendChild(buildTagItem(tag));
     }
   }
@@ -126,6 +211,8 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     tags = tagsResponse.tags || [];
     const allBookmarks = bookmarksResponse.bookmarks || [];
+
+    starredBookmarks = allBookmarks.filter(b => Boolean(b.is_favorite));
 
     for (const bookmark of allBookmarks) {
       for (const tag of (bookmark.tags || [])) {

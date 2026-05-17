@@ -55,6 +55,12 @@ body {
   margin-bottom: 4px;
 }
 
+.sidebar-title-link {
+  text-decoration: none;
+  flex: 1;
+  min-width: 0;
+}
+
 .sidebar-header h1 {
   font-size: 1.1rem;
   font-weight: 800;
@@ -63,7 +69,6 @@ body {
   -webkit-text-fill-color: transparent;
   background-clip: text;
   line-height: 1;
-  flex: 1;
 }
 
 /* Sort toggle */
@@ -245,4 +250,33 @@ body {
   font-style: italic;
   cursor: default;
   padding: 8px 4px;
+}
+
+/* Starred / pinned items */
+.tag-folder--starred .tag-folder-header {
+  background: rgba(255, 195, 50, 0.07);
+  border: 1px solid rgba(255, 195, 50, 0.18);
+}
+
+.tag-folder--starred .tag-folder-header:hover {
+  background: rgba(255, 195, 50, 0.12);
+}
+
+.tag-folder--starred .tag-label {
+  color: #e8c84a;
+}
+
+.pinned-star {
+  font-size: 11px;
+  line-height: 1;
+  color: #e8c84a;
+  flex-shrink: 0;
+}
+
+/* Divider between pinned and regular sections */
+.tags-section-divider {
+  height: 1px;
+  background: var(--panel-border);
+  margin: 4px 2px;
+  list-style: none;
 }
