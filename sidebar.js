@@ -20,10 +20,19 @@ document.addEventListener("DOMContentLoaded", async () => {
     token: settings.token,
   });
 
+  const refreshBtn = document.getElementById("refresh-btn");
+
   let sortMode = 'count'; // 'count' | 'alpha'
   let tags = [];
   let bookmarksByTag = new Map();
   let starredBookmarks = [];
+
+  function collapseOthers(except) {
+    tagsList.querySelectorAll('.tag-folder.open').forEach(el => {
+      if (el === except) return;
+      el.classList.remove('open');
+    });
+  }
 
   function buildBookmarkItem(bookmark) {
     const bookmarkItem = document.createElement("li");
@@ -79,17 +88,18 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     const bookmarksList = document.createElement("ul");
     bookmarksList.classList.add("bookmarks-list");
-    bookmarksList.hidden = true;
 
-    const tagBookmarks = bookmarksByTag.get(tag.name) || [];
+    const tagBookmarks = (bookmarksByTag.get(tag.name) || [])
+      .slice()
+      .sort((a, b) => (a.title || '').localeCompare(b.title || ''));
     for (const bookmark of tagBookmarks) {
       bookmarksList.appendChild(buildBookmarkItem(bookmark));
     }
 
     header.addEventListener("click", (e) => {
       e.stopPropagation();
-      const isOpen = !bookmarksList.hidden;
-      bookmarksList.hidden = isOpen;
+      const isOpen = tagItem.classList.contains("open");
+      if (!isOpen) collapseOthers(tagItem);
       tagItem.classList.toggle("open", !isOpen);
     });
 
@@ -129,20 +139,20 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     const list = document.createElement("ul");
     list.classList.add("bookmarks-list");
-    list.hidden = true;
 
     for (const bookmark of starredBookmarks) {
       list.appendChild(buildBookmarkItem(bookmark));
     }
 
     header.addEventListener("click", () => {
-      const isOpen = !list.hidden;
-      list.hidden = isOpen;
+      const isOpen = item.classList.contains("open");
+      if (!isOpen) collapseOthers(item);
       item.classList.toggle("open", !isOpen);
     });
 
     item.appendChild(header);
     item.appendChild(list);
+    item.classList.add("open");
     return item;
   }
 
@@ -203,28 +213,41 @@ document.addEventListener("DOMContentLoaded", async () => {
     renderTags();
   });
 
-  try {
-    const [tagsResponse, bookmarksResponse] = await Promise.all([
-      client.getAllTags(),
-      client.getBookmarks(),
-    ]);
+  async function loadData() {
+    refreshBtn.classList.add("spinning");
+    try {
+      const [tagsResponse, bookmarksResponse] = await Promise.all([
+        client.getAllTags(),
+        client.getBookmarks(),
+      ]);
 
-    tags = tagsResponse.tags || [];
-    const allBookmarks = bookmarksResponse.bookmarks || [];
+      tags = tagsResponse.tags || [];
+      const allBookmarks = bookmarksResponse.bookmarks || [];
 
-    starredBookmarks = allBookmarks.filter(b => Boolean(b.is_favorite));
+      starredBookmarks = allBookmarks
+        .filter(b => Boolean(b.is_favorite))
+        .sort((a, b) => (a.title || '').localeCompare(b.title || ''));
 
-    for (const bookmark of allBookmarks) {
-      for (const tag of (bookmark.tags || [])) {
-        const name = tag.name || tag;
-        if (!bookmarksByTag.has(name)) bookmarksByTag.set(name, []);
-        bookmarksByTag.get(name).push(bookmark);
+      bookmarksByTag = new Map();
+      for (const bookmark of allBookmarks) {
+        for (const tag of (bookmark.tags || [])) {
+          const name = tag.name || tag;
+          if (!bookmarksByTag.has(name)) bookmarksByTag.set(name, []);
+          bookmarksByTag.get(name).push(bookmark);
+        }
       }
-    }
 
-    renderTags();
-  } catch (error) {
-    console.error("Error loading Tagstash data:", error);
-    tagsList.innerHTML = '<li class="empty-state">Failed to load tags. Please try again.</li>';
+      renderTags();
+    } catch (error) {
+      console.error("Error loading Tagstash data:", error);
+      tagsList.innerHTML = '<li class="empty-state">Failed to load tags. Please try again.</li>';
+    } finally {
+      refreshBtn.classList.remove("spinning");
+    }
   }
+
+  refreshBtn.addEventListener("click", loadData);
+  setInterval(loadData, 5 * 60 * 1000);
+
+  loadData();
 });

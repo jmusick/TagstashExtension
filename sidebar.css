@@ -106,6 +106,33 @@ body {
   color: #fff;
 }
 
+/* Refresh button */
+.refresh-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  font-size: 15px;
+  line-height: 1;
+  padding: 2px 4px;
+  cursor: pointer;
+  border-radius: 4px;
+  flex-shrink: 0;
+  transition: color 0.15s;
+}
+
+.refresh-btn:hover {
+  color: var(--text-soft);
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.refresh-btn.spinning {
+  animation: spin 0.7s linear infinite;
+  pointer-events: none;
+}
+
 /* Not logged in state */
 #not-logged-in {
   background: var(--panel);
@@ -200,10 +227,18 @@ body {
 /* Bookmarks list inside a tag */
 .bookmarks-list {
   list-style: none;
-  padding: 4px 6px 6px 6px;
+  padding: 0 6px;
   display: flex;
   flex-direction: column;
   gap: 1px;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.15s ease, padding 0.15s ease;
+}
+
+.tag-folder.open .bookmarks-list {
+  max-height: 600px;
+  padding: 4px 6px 6px 6px;
 }
 
 .bookmark-item {
