@@ -27,6 +27,152 @@ document.addEventListener("DOMContentLoaded", async () => {
   let bookmarksByTag = new Map();
   let starredBookmarks = [];
 
+  // ── Edit modal ──
+  const editOverlay = document.getElementById('edit-overlay');
+  const editForm = document.getElementById('edit-form');
+  const editTitleInput = document.getElementById('edit-title');
+  const editUrlInput = document.getElementById('edit-url');
+  const editDescInput = document.getElementById('edit-desc');
+  const editTagsField = document.getElementById('edit-tags-field');
+  const editTagPillsEl = document.getElementById('edit-tag-pills');
+  const editTagInput = document.getElementById('edit-tags');
+  const editError = document.getElementById('edit-error');
+  const editSaveBtn = document.getElementById('edit-save');
+
+  let editingBookmarkId = null;
+  let editTagList = [];
+
+  function normalizeEditTags(arr) {
+    return Array.from(new Set(arr.map(t => t.trim().toLowerCase()).filter(Boolean)));
+  }
+
+  function renderEditTagPills() {
+    editTagPillsEl.innerHTML = '';
+    editTagList.forEach((tag, index) => {
+      const pill = document.createElement('span');
+      pill.className = 'edit-tag-pill';
+
+      const text = document.createElement('span');
+      text.textContent = tag;
+
+      const removeBtn = document.createElement('button');
+      removeBtn.type = 'button';
+      removeBtn.className = 'edit-tag-pill-remove';
+      removeBtn.setAttribute('aria-label', `Remove tag ${tag}`);
+      removeBtn.textContent = '\xd7';
+      removeBtn.addEventListener('click', () => {
+        editTagList.splice(index, 1);
+        renderEditTagPills();
+      });
+
+      pill.appendChild(text);
+      pill.appendChild(removeBtn);
+      editTagPillsEl.appendChild(pill);
+    });
+  }
+
+  function setEditTagList(arr) {
+    editTagList = normalizeEditTags(arr);
+    renderEditTagPills();
+  }
+
+  function commitEditTagDraft() {
+    const raw = editTagInput.value || '';
+    const pending = raw.split(/[\s,]+/).map(t => t.trim().toLowerCase()).filter(Boolean);
+    if (pending.length === 0) return;
+    setEditTagList([...editTagList, ...pending]);
+    editTagInput.value = '';
+  }
+
+  editTagsField.addEventListener('click', () => editTagInput.focus());
+
+  editTagInput.addEventListener('keydown', (e) => {
+    const isDelimiter = e.key === ',' || e.key === ' ' || e.key === 'Spacebar';
+    if (isDelimiter && editTagInput.value.trim()) {
+      e.preventDefault();
+      commitEditTagDraft();
+      return;
+    }
+    if (e.key === 'Backspace' && !editTagInput.value && editTagList.length > 0) {
+      e.preventDefault();
+      editTagList.pop();
+      renderEditTagPills();
+    }
+    if (e.key === 'Enter' && editTagInput.value.trim()) {
+      e.preventDefault();
+      commitEditTagDraft();
+    }
+  });
+
+  function openEditModal(bookmark) {
+    editingBookmarkId = bookmark.id;
+    editTitleInput.value = bookmark.title || '';
+    editUrlInput.value = bookmark.url || '';
+    editDescInput.value = bookmark.description || '';
+    setEditTagList((bookmark.tags || []).map(t => t.name || t));
+    editTagInput.value = '';
+    editError.hidden = true;
+    editOverlay.hidden = false;
+    editTitleInput.focus();
+  }
+
+  function closeEditModal() {
+    editOverlay.hidden = true;
+    editingBookmarkId = null;
+  }
+
+  document.getElementById('edit-close').addEventListener('click', closeEditModal);
+  document.getElementById('edit-cancel').addEventListener('click', closeEditModal);
+  editOverlay.addEventListener('click', (e) => {
+    if (e.target === editOverlay) closeEditModal();
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && !editOverlay.hidden) closeEditModal();
+  });
+
+  editForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    if (!editingBookmarkId) return;
+
+    commitEditTagDraft();
+
+    const data = {
+      title: editTitleInput.value.trim(),
+      url: editUrlInput.value.trim(),
+      description: editDescInput.value.trim(),
+      tags: editTagList,
+    };
+
+    editSaveBtn.disabled = true;
+    editSaveBtn.textContent = 'Saving…';
+    editError.hidden = true;
+
+    try {
+      await client.updateBookmark(editingBookmarkId, data);
+      closeEditModal();
+      await loadData();
+    } catch (err) {
+      editError.textContent = err.message || 'Failed to save.';
+      editError.hidden = false;
+    } finally {
+      editSaveBtn.disabled = false;
+      editSaveBtn.textContent = 'Save';
+    }
+  });
+
+  // Persist the currently open tag/folder in localStorage
+  function setOpenTag(tagName) {
+    if (tagName) {
+      localStorage.setItem('sidebarOpenTag', tagName);
+    } else {
+      localStorage.removeItem('sidebarOpenTag');
+    }
+  }
+
+  function getOpenTag() {
+    return localStorage.getItem('sidebarOpenTag');
+  }
+
   function collapseOthers(except) {
     tagsList.querySelectorAll('.tag-folder.open').forEach(el => {
       if (el === except) return;
@@ -53,6 +199,18 @@ document.addEventListener("DOMContentLoaded", async () => {
     link.target = "_blank";
     link.rel = "noopener noreferrer";
     bookmarkItem.appendChild(link);
+
+    const editBtn = document.createElement("button");
+    editBtn.classList.add("bookmark-edit-btn");
+    editBtn.textContent = "Edit";
+    editBtn.title = "Edit bookmark";
+    editBtn.type = "button";
+    editBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      openEditModal(bookmark);
+    });
+    bookmarkItem.appendChild(editBtn);
+
     return bookmarkItem;
   }
 
@@ -96,11 +254,22 @@ document.addEventListener("DOMContentLoaded", async () => {
       bookmarksList.appendChild(buildBookmarkItem(bookmark));
     }
 
+    // Restore open state if this tag is the one saved in localStorage
+    if (getOpenTag() === tag.name) {
+      tagItem.classList.add("open");
+    }
+
     header.addEventListener("click", (e) => {
       e.stopPropagation();
       const isOpen = tagItem.classList.contains("open");
-      if (!isOpen) collapseOthers(tagItem);
-      tagItem.classList.toggle("open", !isOpen);
+      if (!isOpen) {
+        collapseOthers(tagItem);
+        tagItem.classList.add("open");
+        setOpenTag(tag.name);
+      } else {
+        tagItem.classList.remove("open");
+        setOpenTag(null);
+      }
     });
 
     tagItem.appendChild(header);
@@ -144,15 +313,26 @@ document.addEventListener("DOMContentLoaded", async () => {
       list.appendChild(buildBookmarkItem(bookmark));
     }
 
+    // Restore open state: open by default on first load, or if explicitly saved
+    const savedTag = getOpenTag();
+    if (savedTag === '__starred__' || savedTag === null) {
+      item.classList.add("open");
+    }
+
     header.addEventListener("click", () => {
       const isOpen = item.classList.contains("open");
-      if (!isOpen) collapseOthers(item);
-      item.classList.toggle("open", !isOpen);
+      if (!isOpen) {
+        collapseOthers(item);
+        item.classList.add("open");
+        setOpenTag('__starred__');
+      } else {
+        item.classList.remove("open");
+        setOpenTag(null);
+      }
     });
 
     item.appendChild(header);
     item.appendChild(list);
-    item.classList.add("open");
     return item;
   }
 

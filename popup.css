@@ -29,7 +29,7 @@
 
 body {
   margin: 0;
-  overflow: visible;
+  overflow-x: hidden;
   background: radial-gradient(circle at top, rgba(109, 69, 255, 0.2), transparent 32%), linear-gradient(180deg, #0f1024 0%, #090914 100%);
   color: var(--text);
   -webkit-font-smoothing: antialiased;
@@ -37,7 +37,7 @@ body {
 }
 
 .popup-shell {
-  padding: 8px;
+  padding: 12px;
   overflow: visible;
 }
 
@@ -85,7 +85,7 @@ body {
 }
 
 .panel {
-  padding: 8px;
+  padding: 10px;
 }
 
 .panel-heading {
@@ -360,7 +360,8 @@ button:disabled {
 
 .action-info-tooltip {
   position: absolute;
-  left: -50px;
+  right: 0;
+  left: auto;
   bottom: calc(100% + 6px);
   width: 140px;
   padding: 6px 8px;
