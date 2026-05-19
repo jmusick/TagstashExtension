@@ -196,8 +196,11 @@ document.addEventListener("DOMContentLoaded", async () => {
     const link = document.createElement("a");
     link.href = bookmark.url;
     link.textContent = bookmark.title;
-    link.target = "_blank";
     link.rel = "noopener noreferrer";
+    link.addEventListener("click", (e) => {
+      e.preventDefault();
+      browser.tabs.update({ url: bookmark.url });
+    });
     bookmarkItem.appendChild(link);
 
     const editBtn = document.createElement("button");
