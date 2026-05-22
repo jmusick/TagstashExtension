@@ -184,13 +184,17 @@ document.addEventListener("DOMContentLoaded", async () => {
     const bookmarkItem = document.createElement("li");
     bookmarkItem.classList.add("bookmark-item");
 
-    if (bookmark.favicon_url) {
+    try {
+      const domain = new URL(bookmark.url).hostname;
       const favicon = document.createElement("img");
-      favicon.src = bookmark.favicon_url;
+      favicon.src = `https://icons.duckduckgo.com/ip3/${domain}.ico`;
       favicon.classList.add("bookmark-favicon");
       favicon.width = 16;
       favicon.height = 16;
+      favicon.addEventListener("error", () => { favicon.style.display = "none"; });
       bookmarkItem.appendChild(favicon);
+    } catch {
+      // invalid URL — skip favicon
     }
 
     const link = document.createElement("a");
