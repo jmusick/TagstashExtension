@@ -327,7 +327,7 @@ async function handleFetchDescription() {
 function handleBaseUrl() {
   try {
     const u = new URL(normalizeBookmarkUrl(elements.bookmarkUrl.value));
-    elements.bookmarkUrl.value = u.origin;
+    elements.bookmarkUrl.value = u.origin + '/';
   } catch {}
 }
 

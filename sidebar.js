@@ -1,6 +1,8 @@
 import { createTagstashClient } from './lib/tagstash-client.js';
 import { getSettings } from './lib/storage.js';
 
+const browserApi = globalThis.browser ?? globalThis.chrome;
+
 document.addEventListener("DOMContentLoaded", async () => {
   const tagsList = document.getElementById("tags-list");
   const notLoggedIn = document.getElementById("not-logged-in");
@@ -12,6 +14,14 @@ document.addEventListener("DOMContentLoaded", async () => {
     tagsList.hidden = true;
     sortToggle.hidden = true;
     notLoggedIn.hidden = false;
+
+    // Reload when a token is saved (user logs in from the popup)
+    browserApi.storage.onChanged.addListener((changes, area) => {
+      if (area === 'local' && changes['tagstash.token']?.newValue) {
+        location.reload();
+      }
+    });
+
     return;
   }
 
