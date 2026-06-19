@@ -8,6 +8,8 @@ A Firefox WebExtension that saves the active tab to your [Tagsta.sh](https://tag
 - Reads the active browser tab's URL and title
 - Optionally fetches page title and description from the Tagstash metadata endpoint
 - Saves the page as a bookmark with comma-separated tags
+- Displays a sidebar panel with your bookmarks organized by tags
+- Edit, search, and manage bookmarks directly from the sidebar
 - Works with [tagsta.sh](https://tagsta.sh) or a self-hosted instance
 
 ## Installation
@@ -15,6 +17,22 @@ A Firefox WebExtension that saves the active tab to your [Tagsta.sh](https://tag
 Install from [Firefox Add-ons (AMO)](https://addons.mozilla.org) — search for **Tagstash**.
 
 Or load it temporarily for development (see below).
+
+## Features
+
+### Popup
+- Quick save of the active tab as a bookmark
+- Add tags and description
+- Auto-fetch page title and description
+- Choose your API endpoint (self-hosted or tagsta.sh)
+
+### Sidebar
+- Browse all your bookmarks organized by tags
+- Search and filter bookmarks
+- Edit bookmark details and tags directly
+- Mark bookmarks as favorites
+- Sort by count or alphabetically
+- Responsive to session changes (auto-refresh on login)
 
 ## Configuration
 
@@ -29,6 +47,7 @@ By default the extension points to `https://tagsta.sh/api`. To use a self-hosted
 
 - `manifest.json` - Firefox WebExtension manifest
 - `popup.html`, `popup.css`, `popup.js` - Extension popup UI and logic
+- `sidebar.html`, `sidebar.css`, `sidebar.js` - Sidebar panel UI and logic
 - `options.html`, `options.css`, `options.js` - Extension settings page
 - `lib/storage.js` - Local extension storage helpers
 - `lib/tagstash-client.js` - Minimal API client for Tagstash
@@ -40,8 +59,13 @@ By default the extension points to `https://tagsta.sh/api`. To use a self-hosted
 3. Click **Load Temporary Add-on...**
 4. Select `manifest.json` from this folder
 
+## Privacy
+
+See the [Tagsta.sh Privacy Policy](https://tagsta.sh/privacy) for details on how your data is handled.
+
 ## Notes
 
 - The popup only supports `http` and `https` pages
 - Firefox internal pages (`about:*`) cannot be saved from the popup
 - Changing the API base URL in settings clears the current session
+- Your authentication token is stored locally in Firefox and never transmitted except to your configured API endpoint

@@ -3,6 +3,15 @@ import { getSettings } from './lib/storage.js';
 
 const browserApi = globalThis.browser ?? globalThis.chrome;
 
+// Set up storage listener at module level so it's always active
+// This allows the sidebar to refresh when login status changes
+browserApi.storage.onChanged.addListener((changes, areaName) => {
+  if (areaName === 'local' && changes['tagstash.token']) {
+    console.log('[Tagstash Sidebar] Token changed, reloading...');
+    location.reload();
+  }
+});
+
 document.addEventListener("DOMContentLoaded", async () => {
   const tagsList = document.getElementById("tags-list");
   const notLoggedIn = document.getElementById("not-logged-in");
@@ -14,14 +23,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     tagsList.hidden = true;
     sortToggle.hidden = true;
     notLoggedIn.hidden = false;
-
-    // Reload when a token is saved (user logs in from the popup)
-    browserApi.storage.onChanged.addListener((changes, area) => {
-      if (area === 'local' && changes['tagstash.token']?.newValue) {
-        location.reload();
-      }
-    });
-
     return;
   }
 
