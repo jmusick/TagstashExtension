@@ -16,12 +16,16 @@ document.addEventListener("DOMContentLoaded", async () => {
   const tagsList = document.getElementById("tags-list");
   const notLoggedIn = document.getElementById("not-logged-in");
   const sortToggle = document.getElementById("sort-toggle");
+  const searchRow = document.getElementById("sidebar-search");
+  const searchInput = document.getElementById("search-input");
+  const searchClearBtn = document.getElementById("search-clear");
 
   const settings = await getSettings();
 
   if (!settings.token) {
     tagsList.hidden = true;
     sortToggle.hidden = true;
+    searchRow.hidden = true;
     notLoggedIn.hidden = false;
     return;
   }
@@ -37,6 +41,18 @@ document.addEventListener("DOMContentLoaded", async () => {
   let tags = [];
   let bookmarksByTag = new Map();
   let starredBookmarks = [];
+  let allBookmarks = [];
+  let searchTerm = '';
+
+  function matchesSearch(bookmark, term) {
+    if (!term) return true;
+    const tagsText = (bookmark.tags || []).map(t => t.name || t).join(' ');
+    const searchable = [bookmark.title, bookmark.url, bookmark.description, tagsText]
+      .filter(Boolean)
+      .join(' ')
+      .toLowerCase();
+    return searchable.includes(term);
+  }
 
   // ── Edit modal ──
   const editOverlay = document.getElementById('edit-overlay');
@@ -354,6 +370,33 @@ document.addEventListener("DOMContentLoaded", async () => {
     return item;
   }
 
+  function buildSearchResultsSection(matches) {
+    const wrapper = document.createElement("li");
+    wrapper.classList.add("search-results");
+
+    if (matches.length === 0) {
+      const empty = document.createElement("div");
+      empty.classList.add("empty-state");
+      empty.textContent = "No bookmarks match your search.";
+      wrapper.appendChild(empty);
+      return wrapper;
+    }
+
+    const header = document.createElement("div");
+    header.classList.add("search-results-header");
+    header.textContent = matches.length === 1 ? "1 result" : `${matches.length} results`;
+    wrapper.appendChild(header);
+
+    const list = document.createElement("ul");
+    list.classList.add("bookmarks-list", "bookmarks-list--flat");
+    for (const bookmark of matches) {
+      list.appendChild(buildBookmarkItem(bookmark));
+    }
+    wrapper.appendChild(list);
+
+    return wrapper;
+  }
+
   function getSortedTags(tagList) {
     const sorted = [...tagList];
     if (sortMode === 'alpha') {
@@ -366,6 +409,12 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   function renderTags() {
     tagsList.innerHTML = '';
+
+    if (searchTerm) {
+      const matches = allBookmarks.filter(b => matchesSearch(b, searchTerm));
+      tagsList.appendChild(buildSearchResultsSection(matches));
+      return;
+    }
 
     const starredTags = tags.filter(t => Boolean(t.is_favorite));
     const regularTags = tags.filter(t => !Boolean(t.is_favorite));
@@ -400,6 +449,21 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
   }
 
+  // Search box
+  searchInput.addEventListener("input", () => {
+    searchTerm = searchInput.value.trim().toLowerCase();
+    searchClearBtn.hidden = !searchTerm;
+    renderTags();
+  });
+
+  searchClearBtn.addEventListener("click", () => {
+    searchInput.value = '';
+    searchTerm = '';
+    searchClearBtn.hidden = true;
+    renderTags();
+    searchInput.focus();
+  });
+
   // Sort toggle buttons
   sortToggle.addEventListener("click", (e) => {
     const btn = e.target.closest(".sort-btn");
@@ -420,7 +484,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       ]);
 
       tags = tagsResponse.tags || [];
-      const allBookmarks = bookmarksResponse.bookmarks || [];
+      allBookmarks = bookmarksResponse.bookmarks || [];
 
       starredBookmarks = allBookmarks
         .filter(b => Boolean(b.is_favorite))

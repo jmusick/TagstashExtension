@@ -83,14 +83,31 @@ function isSupportedUrl(url) {
 function normalizeBookmarkUrl(value) {
   const raw = (value || '').trim();
   if (!raw) return '';
-  if (/^https?:\/\//i.test(raw)) return raw;
 
-  const cleaned = raw
-    .replace(/^https?:/i, '')
-    .replace(/^\/\//, '')
-    .trim();
+  let normalized;
+  if (/^https?:\/\//i.test(raw)) {
+    normalized = raw;
+  } else {
+    const cleaned = raw
+      .replace(/^https?:/i, '')
+      .replace(/^\/\//, '')
+      .trim();
 
-  return cleaned ? `https://${cleaned}` : '';
+    normalized = cleaned ? `https://${cleaned}` : '';
+  }
+  if (!normalized) return '';
+
+  // A trailing slash on a bare root path (no deeper path/query/hash) is purely
+  // cosmetic, so drop it for a consistent stored form regardless of where the
+  // URL was copied from (e.g. Firefox's address bar always includes it).
+  try {
+    const parsed = new URL(normalized);
+    if (parsed.pathname === '/' && !parsed.search && !parsed.hash) {
+      return parsed.origin;
+    }
+  } catch {}
+
+  return normalized;
 }
 
 function normalizeTags(tagInput) {
@@ -327,7 +344,7 @@ async function handleFetchDescription() {
 function handleBaseUrl() {
   try {
     const u = new URL(normalizeBookmarkUrl(elements.bookmarkUrl.value));
-    elements.bookmarkUrl.value = u.origin + '/';
+    elements.bookmarkUrl.value = u.origin;
   } catch {}
 }
 

@@ -133,6 +133,69 @@ body {
   pointer-events: none;
 }
 
+/* Search box */
+.sidebar-search {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+#search-input {
+  width: 100%;
+  background: rgba(139, 109, 255, 0.08);
+  border: 1px solid var(--panel-border-strong);
+  border-radius: 6px;
+  padding: 6px 26px 6px 8px;
+  color: var(--text);
+  font: inherit;
+  font-size: 12px;
+}
+
+#search-input:focus {
+  outline: none;
+  border-color: var(--accent-secondary);
+  box-shadow: 0 0 0 2px rgba(139, 109, 255, 0.2);
+}
+
+#search-input::placeholder {
+  color: var(--text-muted);
+}
+
+.search-clear-btn {
+  position: absolute;
+  right: 3px;
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  font-size: 11px;
+  padding: 4px 6px;
+  cursor: pointer;
+  border-radius: 4px;
+  line-height: 1;
+}
+
+.search-clear-btn:hover {
+  color: var(--text);
+  background: rgba(139, 109, 255, 0.1);
+  transform: none;
+}
+
+/* Flat search results list (no tag folder) */
+.search-results-header {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  padding: 4px 6px;
+}
+
+.bookmarks-list.bookmarks-list--flat {
+  max-height: none;
+  overflow: visible;
+  padding: 2px 2px 6px 2px;
+}
+
 /* Not logged in state */
 #not-logged-in {
   background: var(--panel);
