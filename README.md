@@ -1,6 +1,6 @@
 # Tagstash for Firefox
 
-A Firefox WebExtension that saves the active tab to your [Tagsta.sh](https://tagsta.sh) bookmark manager.
+A Firefox WebExtension that saves the active tab to your [Tagstash](https://tagsta.sh) bookmark manager.
 
 ## What it does
 
@@ -61,7 +61,7 @@ By default the extension points to `https://tagsta.sh/api`. To use a self-hosted
 
 ## Privacy
 
-See the [Tagsta.sh Privacy Policy](https://tagsta.sh/privacy) for details on how your data is handled.
+See the [Tagstash Privacy Policy](https://tagsta.sh/privacy) for details on how your data is handled.
 
 ## Notes
 

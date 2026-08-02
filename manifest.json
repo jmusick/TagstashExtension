@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
-  "name": "Tagsta.sh",
-  "version": "1.5.0",
-  "description": "Save the current tab to your Tagsta.sh bookmark manager.",
+  "name": "Tagstash",
+  "version": "1.6.0",
+  "description": "Save the current tab to your Tagstash bookmark manager.",
   "permissions": [
     "storage", "tabs", "activeTab", "scripting"
   ],
@@ -13,7 +13,7 @@
     "<all_urls>"
   ],
   "action": {
-    "default_title": "Save to Tagsta.sh",
+    "default_title": "Save to Tagstash",
     "default_popup": "popup.html",
     "default_icon": {
       "16": "icons/icon-16.png",
@@ -41,7 +41,7 @@
     }
   },
   "sidebar_action": {
-    "default_title": "Tagsta.sh Sidebar",
+    "default_title": "Tagstash Sidebar",
     "default_icon": {
       "16": "icons/icon-16.png",
       "48": "icons/icon-48.png",
