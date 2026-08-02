@@ -27,6 +27,7 @@ const elements = {
   saveButton: document.getElementById('saveButton'),
   baseUrlButton: document.getElementById('baseUrlButton'),
   trimUrlButton: document.getElementById('trimUrlButton'),
+  openSidebarButton: document.getElementById('openSidebarButton'),
 };
 
 const state = {
@@ -355,6 +356,16 @@ function handleTrimUrl() {
   } catch {}
 }
 
+function handleOpenSidebar() {
+  const windowId = state.activeTab?.windowId;
+  if (!browserApi.sidePanel || windowId == null) return;
+
+  browserApi.sidePanel
+    .open({ windowId })
+    .then(() => window.close())
+    .catch(() => showMessage('error', 'Unable to open sidebar'));
+}
+
 async function checkExistingBookmark() {
   const normalizedUrl = normalizeBookmarkUrl(elements.bookmarkUrl.value.trim());
   if (!normalizedUrl || !isSupportedUrl(normalizedUrl)) return;
@@ -485,6 +496,11 @@ async function init() {
   if (state.token) {
     await checkExistingBookmark();
     await loadAllTagNames();
+  }
+
+  if (browserApi.sidePanel && state.activeTab?.windowId != null) {
+    elements.openSidebarButton.hidden = false;
+    elements.openSidebarButton.addEventListener('click', handleOpenSidebar);
   }
 
   elements.loginForm.addEventListener('submit', handleLogin);

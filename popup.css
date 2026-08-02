@@ -29,6 +29,8 @@
 
 body {
   margin: 0;
+  width: 360px;
+  min-width: 360px;
   overflow-x: hidden;
   background: radial-gradient(circle at top, rgba(109, 69, 255, 0.2), transparent 32%), linear-gradient(180deg, #0f1024 0%, #090914 100%);
   color: var(--text);
@@ -178,6 +180,11 @@ button:disabled {
   opacity: 0.5;
   cursor: not-allowed;
   transform: none;
+}
+
+.sidebar-button {
+  width: 100%;
+  margin-top: 8px;
 }
 
 .secondary-button,
