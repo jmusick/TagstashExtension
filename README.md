@@ -10,7 +10,6 @@ A Firefox WebExtension that saves the active tab to your [Tagstash](https://tags
 - Saves the page as a bookmark with comma-separated tags
 - Displays a sidebar panel with your bookmarks organized by tags
 - Edit, search, and manage bookmarks directly from the sidebar
-- Works with [tagsta.sh](https://tagsta.sh) or a self-hosted instance
 
 ## Installation
 
@@ -24,7 +23,6 @@ Or load it temporarily for development (see below).
 - Quick save of the active tab as a bookmark
 - Add tags and description
 - Auto-fetch page title and description
-- Choose your API endpoint (self-hosted or tagsta.sh)
 
 ### Sidebar
 - Browse all your bookmarks organized by tags
@@ -36,12 +34,7 @@ Or load it temporarily for development (see below).
 
 ## Configuration
 
-By default the extension points to `https://tagsta.sh/api`. To use a self-hosted instance:
-
-1. Click the extension icon → **Settings** (gear icon)
-2. Enter your API base URL, e.g. `https://your-instance.com/api`
-3. Click **Save** — Firefox will ask you to grant access to that URL
-4. Sign in again in the popup
+By default the extension points to `https://tagsta.sh/api`. The API base URL can be changed in **Settings** (gear icon) if needed, e.g. for local development.
 
 ## Folder layout
 
