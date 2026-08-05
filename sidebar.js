@@ -37,7 +37,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   const refreshBtn = document.getElementById("refresh-btn");
 
-  let sortMode = 'count'; // 'count' | 'alpha'
+  let sortMode = localStorage.getItem('sidebarSortMode') === 'alpha' ? 'alpha' : 'count';
   let tags = [];
   let bookmarksByTag = new Map();
   let starredBookmarks = [];
@@ -471,9 +471,13 @@ document.addEventListener("DOMContentLoaded", async () => {
     const newSort = btn.dataset.sort;
     if (newSort === sortMode) return;
     sortMode = newSort;
+    localStorage.setItem('sidebarSortMode', sortMode);
     sortToggle.querySelectorAll(".sort-btn").forEach(b => b.classList.toggle("active", b.dataset.sort === sortMode));
     renderTags();
   });
+
+  // Reflect restored sort preference in the toggle UI
+  sortToggle.querySelectorAll(".sort-btn").forEach(b => b.classList.toggle("active", b.dataset.sort === sortMode));
 
   async function loadData() {
     refreshBtn.classList.add("spinning");
