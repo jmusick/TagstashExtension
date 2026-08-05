@@ -112,11 +112,13 @@ body {
 .form-stack {
   display: grid;
   gap: 6px;
+  min-width: 0;
 }
 
 label {
   display: grid;
   gap: 2px;
+  min-width: 0;
   font-size: 12px;
   color: var(--muted);
 }
@@ -130,12 +132,15 @@ button {
 input,
 textarea {
   width: 100%;
+  max-width: 100%;
   border: 1px solid var(--field-border);
   border-radius: 6px;
   padding: 4px 7px;
   background: var(--field-bg);
   color: var(--text);
   font-size: 12px;
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 
 input::placeholder,
@@ -210,6 +215,7 @@ button:disabled {
 .field-group {
   display: grid;
   gap: 2px;
+  min-width: 0;
 }
 
 .field-group small {
@@ -299,9 +305,10 @@ button:disabled {
 
 .field-header {
   display: flex;
+  flex-wrap: wrap;
   justify-content: space-between;
   align-items: center;
-  gap: 8px;
+  gap: 4px 8px;
 }
 
 .field-header label {
@@ -312,10 +319,24 @@ button:disabled {
 
 .field-actions {
   display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
   gap: 6px;
+  min-width: 0;
+}
+
+.field-action-wrap {
+  display: inline-flex;
+  align-items: center;
+  min-width: 0;
+  max-width: 100%;
 }
 
 .btn-field-action {
+  min-width: 0;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
   background: transparent;
   border: 1px solid var(--accent-secondary-border);
   color: var(--accent-secondary);
