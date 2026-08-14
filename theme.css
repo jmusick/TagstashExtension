@@ -1,0 +1,204 @@
+/*
+ * Shared theme tokens for every extension page (popup, sidebar, options).
+ *
+ * These mirror the three themes the web app ships in `Tagstash/src/index.css`
+ * (`slate`, `midnight`, `light`). The active theme is written to
+ * `<html data-theme="...">` by `lib/theme.js`, which resolves it from the
+ * signed-in user's saved preference. Keep the palettes in sync with the web
+ * app when its themes change.
+ */
+
+:root,
+:root[data-theme='slate'] {
+  color-scheme: dark;
+
+  --bg: #0c0c0e;
+  --surface: #18181b;
+  --panel: rgba(24, 24, 27, 0.86);
+  --panel-strong: #1f1f23;
+  --panel-border: rgba(228, 228, 231, 0.14);
+  --panel-border-strong: rgba(228, 228, 231, 0.26);
+  --card: rgba(24, 24, 27, 0.86);
+  --card-border: rgba(228, 228, 231, 0.26);
+
+  --field-bg: rgba(139, 109, 255, 0.1);
+  --field-border: rgba(228, 228, 231, 0.26);
+  --surface-soft: rgba(139, 109, 255, 0.08);
+  --surface-soft-hover: rgba(139, 109, 255, 0.14);
+  --surface-soft-strong: rgba(139, 109, 255, 0.2);
+
+  --text: #f4f4f5;
+  --text-soft: rgba(244, 244, 245, 0.8);
+  --text-muted: rgba(244, 244, 245, 0.56);
+  --muted: rgba(244, 244, 245, 0.56);
+  --placeholder: rgba(244, 244, 245, 0.42);
+
+  --accent: #6d45ff;
+  --accent-hover: #7d5dff;
+  --accent-secondary: #8b6dff;
+  --accent-secondary-border: rgba(228, 228, 231, 0.26);
+  --accent-strong: #8b6dff;
+  --on-accent: #ffffff;
+  --focus-shadow: rgba(109, 69, 255, 0.3);
+  --link: #a998ff;
+
+  --tag-gradient: linear-gradient(135deg, #5630f3 0%, #8b6dff 100%);
+  --tag-bg: rgba(109, 69, 255, 0.14);
+  --tag-bg-hover: rgba(109, 69, 255, 0.22);
+  --tag-border: rgba(139, 109, 255, 0.3);
+  --pill-remove-bg: rgba(255, 255, 255, 0.24);
+  --pill-remove-bg-hover: rgba(255, 255, 255, 0.4);
+  --item-hover: rgba(139, 109, 255, 0.08);
+
+  --star: #e8c84a;
+  --star-bg: rgba(255, 195, 50, 0.07);
+  --star-bg-hover: rgba(255, 195, 50, 0.12);
+  --star-border: rgba(255, 195, 50, 0.18);
+
+  --success-bg: rgba(103, 215, 162, 0.14);
+  --success-text: #67d7a2;
+  --success-border: rgba(103, 215, 162, 0.3);
+  --error-bg: rgba(255, 95, 123, 0.14);
+  --error-text: #ff8f9e;
+  --error-border: rgba(255, 143, 158, 0.34);
+
+  --overlay: rgba(4, 4, 5, 0.72);
+  --shadow: 0 14px 42px rgba(0, 0, 0, 0.34);
+  --shadow-modal: 0 18px 54px rgba(0, 0, 0, 0.42);
+
+  --page-gradient: radial-gradient(circle at top, rgba(161, 161, 170, 0.08), transparent 32%),
+                   linear-gradient(180deg, #131315 0%, #0c0c0e 100%);
+  --heading-gradient: linear-gradient(90deg, #8b6dff, #c4b4ff);
+}
+
+:root[data-theme='midnight'] {
+  color-scheme: dark;
+
+  --bg: #090914;
+  --surface: #14142b;
+  --panel: rgba(20, 20, 43, 0.86);
+  --panel-strong: #161631;
+  --panel-border: rgba(180, 168, 255, 0.18);
+  --panel-border-strong: rgba(180, 168, 255, 0.34);
+  --card: rgba(20, 20, 43, 0.86);
+  --card-border: rgba(180, 168, 255, 0.34);
+
+  --field-bg: rgba(139, 109, 255, 0.1);
+  --field-border: rgba(180, 168, 255, 0.34);
+  --surface-soft: rgba(139, 109, 255, 0.08);
+  --surface-soft-hover: rgba(139, 109, 255, 0.14);
+  --surface-soft-strong: rgba(139, 109, 255, 0.2);
+
+  --text: #f2efff;
+  --text-soft: rgba(242, 239, 255, 0.8);
+  --text-muted: rgba(242, 239, 255, 0.56);
+  --muted: rgba(242, 239, 255, 0.56);
+  --placeholder: rgba(242, 239, 255, 0.42);
+
+  --accent: #6d45ff;
+  --accent-hover: #7d5dff;
+  --accent-secondary: #8b6dff;
+  --accent-secondary-border: rgba(180, 168, 255, 0.34);
+  --accent-strong: #8b6dff;
+  --on-accent: #ffffff;
+  --focus-shadow: rgba(109, 69, 255, 0.3);
+  --link: #a998ff;
+
+  --tag-gradient: linear-gradient(135deg, #5630f3 0%, #8b6dff 100%);
+  --tag-bg: rgba(109, 69, 255, 0.14);
+  --tag-bg-hover: rgba(109, 69, 255, 0.22);
+  --tag-border: rgba(139, 109, 255, 0.3);
+  --pill-remove-bg: rgba(255, 255, 255, 0.24);
+  --pill-remove-bg-hover: rgba(255, 255, 255, 0.4);
+  --item-hover: rgba(139, 109, 255, 0.08);
+
+  --star: #e8c84a;
+  --star-bg: rgba(255, 195, 50, 0.07);
+  --star-bg-hover: rgba(255, 195, 50, 0.12);
+  --star-border: rgba(255, 195, 50, 0.18);
+
+  --success-bg: rgba(103, 215, 162, 0.14);
+  --success-text: #67d7a2;
+  --success-border: rgba(103, 215, 162, 0.3);
+  --error-bg: rgba(255, 95, 123, 0.14);
+  --error-text: #ff8f9e;
+  --error-border: rgba(255, 143, 158, 0.34);
+
+  --overlay: rgba(4, 4, 12, 0.72);
+  --shadow: 0 14px 42px rgba(0, 0, 0, 0.34);
+  --shadow-modal: 0 18px 54px rgba(0, 0, 0, 0.42);
+
+  --page-gradient: radial-gradient(circle at top, rgba(109, 69, 255, 0.2), transparent 32%),
+                   linear-gradient(180deg, #0f1024 0%, #090914 100%);
+  --heading-gradient: linear-gradient(90deg, #8b6dff, #c4b4ff);
+}
+
+:root[data-theme='light'] {
+  color-scheme: light;
+
+  --bg: #f5f4ff;
+  --surface: #ffffff;
+  --panel: rgba(255, 255, 255, 0.88);
+  --panel-strong: #ffffff;
+  --panel-border: rgba(12, 10, 51, 0.12);
+  --panel-border-strong: rgba(12, 10, 51, 0.22);
+  --card: rgba(255, 255, 255, 0.88);
+  --card-border: rgba(12, 10, 51, 0.22);
+
+  --field-bg: rgba(92, 49, 245, 0.08);
+  --field-border: rgba(12, 10, 51, 0.22);
+  --surface-soft: rgba(92, 49, 245, 0.07);
+  --surface-soft-hover: rgba(92, 49, 245, 0.13);
+  --surface-soft-strong: rgba(92, 49, 245, 0.18);
+
+  --text: #0b0a33;
+  --text-soft: rgba(11, 10, 51, 0.78);
+  --text-muted: rgba(11, 10, 51, 0.56);
+  --muted: rgba(11, 10, 51, 0.56);
+  --placeholder: rgba(11, 10, 51, 0.38);
+
+  --accent: #5c31f5;
+  --accent-hover: #4e26e5;
+  --accent-secondary: #7c4dff;
+  --accent-secondary-border: rgba(12, 10, 51, 0.22);
+  --accent-strong: #4520d9;
+  --on-accent: #ffffff;
+  --focus-shadow: rgba(92, 49, 245, 0.2);
+  --link: #5c31f5;
+
+  --tag-gradient: linear-gradient(135deg, #4f28e7 0%, #7c4dff 100%);
+  --tag-bg: rgba(92, 49, 245, 0.1);
+  --tag-bg-hover: rgba(92, 49, 245, 0.16);
+  --tag-border: rgba(92, 49, 245, 0.28);
+  --pill-remove-bg: rgba(255, 255, 255, 0.28);
+  --pill-remove-bg-hover: rgba(255, 255, 255, 0.48);
+  --item-hover: rgba(92, 49, 245, 0.07);
+
+  --star: #a9770a;
+  --star-bg: rgba(214, 158, 20, 0.1);
+  --star-bg-hover: rgba(214, 158, 20, 0.18);
+  --star-border: rgba(214, 158, 20, 0.32);
+
+  --success-bg: rgba(24, 143, 104, 0.1);
+  --success-text: #188f68;
+  --success-border: rgba(24, 143, 104, 0.24);
+  --error-bg: rgba(217, 58, 102, 0.12);
+  --error-text: #d93a66;
+  --error-border: rgba(217, 58, 102, 0.28);
+
+  --overlay: rgba(12, 10, 51, 0.18);
+  --shadow: 0 20px 40px rgba(26, 16, 74, 0.12);
+  --shadow-modal: 0 28px 54px rgba(26, 16, 74, 0.16);
+
+  --page-gradient: radial-gradient(circle at top, rgba(124, 77, 255, 0.14), transparent 32%),
+                   linear-gradient(180deg, #fcfbff 0%, #f5f4ff 100%);
+  --heading-gradient: linear-gradient(90deg, #4520d9, #7c4dff);
+}
+
+:root {
+  font-family: 'Nunito', 'Segoe UI', system-ui, -apple-system, sans-serif;
+}
+
+html {
+  background-color: var(--bg);
+}

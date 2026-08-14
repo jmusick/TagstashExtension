@@ -1,24 +1,3 @@
-:root {
-  color-scheme: dark;
-  --bg: #090914;
-  --surface: #14142b;
-  --panel: rgba(20, 20, 43, 0.86);
-  --panel-border: rgba(180, 168, 255, 0.18);
-  --panel-border-strong: rgba(180, 168, 255, 0.34);
-  --text: #f2efff;
-  --text-soft: rgba(242, 239, 255, 0.8);
-  --text-muted: rgba(242, 239, 255, 0.5);
-  --accent: #6d45ff;
-  --accent-hover: #7d5dff;
-  --accent-secondary: #8b6dff;
-  --tag-bg: rgba(109, 69, 255, 0.14);
-  --tag-bg-hover: rgba(109, 69, 255, 0.22);
-  --tag-border: rgba(139, 109, 255, 0.3);
-  --item-hover: rgba(139, 109, 255, 0.08);
-  --link: #a998ff;
-  font-family: 'Nunito', 'Segoe UI', system-ui, -apple-system, sans-serif;
-}
-
 * {
   box-sizing: border-box;
   margin: 0;
@@ -30,8 +9,7 @@
 }
 
 body {
-  background: radial-gradient(circle at top, rgba(109, 69, 255, 0.18), transparent 40%),
-              linear-gradient(180deg, #0f1024 0%, #090914 100%);
+  background: var(--page-gradient);
   color: var(--text-soft);
   font-size: 13px;
   line-height: 1.5;
@@ -64,7 +42,7 @@ body {
 .sidebar-header h1 {
   font-size: 1.1rem;
   font-weight: 800;
-  background: linear-gradient(90deg, #8b6dff, #c4b4ff);
+  background: var(--heading-gradient);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -75,7 +53,7 @@ body {
 .sort-toggle {
   display: flex;
   gap: 2px;
-  background: rgba(139, 109, 255, 0.1);
+  background: var(--surface-soft-hover);
   border: 1px solid var(--panel-border);
   border-radius: 6px;
   padding: 2px;
@@ -103,7 +81,7 @@ body {
 
 .sort-btn.active {
   background: var(--accent);
-  color: #fff;
+  color: var(--on-accent);
 }
 
 /* Refresh button */
@@ -142,7 +120,7 @@ body {
 
 #search-input {
   width: 100%;
-  background: rgba(139, 109, 255, 0.08);
+  background: var(--surface-soft);
   border: 1px solid var(--panel-border-strong);
   border-radius: 6px;
   padding: 6px 26px 6px 8px;
@@ -154,7 +132,7 @@ body {
 #search-input:focus {
   outline: none;
   border-color: var(--accent-secondary);
-  box-shadow: 0 0 0 2px rgba(139, 109, 255, 0.2);
+  box-shadow: 0 0 0 2px var(--focus-shadow);
 }
 
 #search-input::placeholder {
@@ -176,7 +154,7 @@ body {
 
 .search-clear-btn:hover {
   color: var(--text);
-  background: rgba(139, 109, 255, 0.1);
+  background: var(--surface-soft-hover);
   transform: none;
 }
 
@@ -281,7 +259,7 @@ body {
   font-size: 10px;
   font-weight: 700;
   color: var(--text-muted);
-  background: rgba(139, 109, 255, 0.15);
+  background: var(--surface-soft-strong);
   border-radius: 999px;
   padding: 1px 6px;
   flex-shrink: 0;
@@ -352,22 +330,22 @@ body {
 
 /* Starred / pinned items */
 .tag-folder--starred .tag-folder-header {
-  background: rgba(255, 195, 50, 0.07);
-  border: 1px solid rgba(255, 195, 50, 0.18);
+  background: var(--star-bg);
+  border: 1px solid var(--star-border);
 }
 
 .tag-folder--starred .tag-folder-header:hover {
-  background: rgba(255, 195, 50, 0.12);
+  background: var(--star-bg-hover);
 }
 
 .tag-folder--starred .tag-label {
-  color: #e8c84a;
+  color: var(--star);
 }
 
 .pinned-star {
   font-size: 11px;
   line-height: 1;
-  color: #e8c84a;
+  color: var(--star);
   flex-shrink: 0;
 }
 
@@ -405,7 +383,7 @@ body {
 .bookmark-edit-btn:hover {
   color: var(--accent-secondary);
   border-color: var(--accent-secondary);
-  background: rgba(139, 109, 255, 0.12);
+  background: var(--surface-soft-hover);
   transform: none;
 }
 
@@ -413,7 +391,7 @@ body {
 .edit-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(9, 9, 20, 0.72);
+  background: var(--overlay);
   backdrop-filter: blur(4px);
   z-index: 100;
   display: flex;
@@ -428,7 +406,7 @@ body {
   border-radius: 14px;
   padding: 16px;
   width: 100%;
-  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.5);
+  box-shadow: var(--shadow-modal);
   display: flex;
   flex-direction: column;
   gap: 12px;
@@ -462,7 +440,7 @@ body {
 
 .edit-close-btn:hover {
   color: var(--text);
-  background: rgba(139, 109, 255, 0.1);
+  background: var(--surface-soft-hover);
   transform: none;
 }
 
@@ -493,7 +471,7 @@ body {
 .edit-field input,
 .edit-field textarea {
   width: 100%;
-  background: rgba(139, 109, 255, 0.08);
+  background: var(--surface-soft);
   border: 1px solid var(--panel-border-strong);
   border-radius: 6px;
   padding: 5px 8px;
@@ -507,7 +485,7 @@ body {
 .edit-field textarea:focus {
   outline: none;
   border-color: var(--accent-secondary);
-  box-shadow: 0 0 0 2px rgba(139, 109, 255, 0.2);
+  box-shadow: 0 0 0 2px var(--focus-shadow);
 }
 
 /* Tag pill input inside edit modal */
@@ -516,7 +494,7 @@ body {
   flex-wrap: wrap;
   align-items: center;
   gap: 5px;
-  background: rgba(139, 109, 255, 0.08);
+  background: var(--surface-soft);
   border: 1px solid var(--panel-border-strong);
   border-radius: 6px;
   padding: 5px;
@@ -526,7 +504,7 @@ body {
 
 .edit-tag-shell:focus-within {
   border-color: var(--accent-secondary);
-  box-shadow: 0 0 0 2px rgba(139, 109, 255, 0.2);
+  box-shadow: 0 0 0 2px var(--focus-shadow);
 }
 
 .edit-tag-pill-list {
@@ -537,8 +515,8 @@ body {
   display: inline-flex;
   align-items: center;
   gap: 4px;
-  background: linear-gradient(135deg, #5630f3 0%, #8b6dff 100%);
-  color: #fff;
+  background: var(--tag-gradient);
+  color: var(--on-accent);
   padding: 2px 7px;
   border-radius: 999px;
   font-size: 11px;
@@ -548,8 +526,8 @@ body {
 
 .edit-tag-pill-remove {
   border: none;
-  background: rgba(255, 255, 255, 0.24);
-  color: #fff;
+  background: var(--pill-remove-bg);
+  color: var(--on-accent);
   width: 13px;
   height: 13px;
   padding: 0;
@@ -563,7 +541,7 @@ body {
 }
 
 .edit-tag-pill-remove:hover {
-  background: rgba(255, 255, 255, 0.4);
+  background: var(--pill-remove-bg-hover);
   transform: none;
 }
 
@@ -582,9 +560,9 @@ body {
 
 .edit-error {
   font-size: 11px;
-  color: #ff8f9e;
-  background: rgba(255, 95, 123, 0.1);
-  border: 1px solid rgba(255, 143, 158, 0.3);
+  color: var(--error-text);
+  background: var(--error-bg);
+  border: 1px solid var(--error-border);
   border-radius: 6px;
   padding: 5px 8px;
 }
@@ -618,7 +596,7 @@ body {
 .edit-save-btn {
   background: var(--accent);
   border: none;
-  color: #fff;
+  color: var(--on-accent);
   border-radius: 6px;
   padding: 5px 14px;
   font-size: 12px;

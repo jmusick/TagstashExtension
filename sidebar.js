@@ -2,6 +2,8 @@ import { createTagstashClient } from './lib/tagstash-client.js';
 import { getSettings } from './lib/storage.js';
 
 const browserApi = globalThis.browser ?? globalThis.chrome;
+// Set up by lib/theme.js, loaded as a classic script in sidebar.html's <head>.
+const themeApi = globalThis.tagstashTheme;
 
 // Set up storage listener at module level so it's always active
 // This allows the sidebar to refresh when login status changes
@@ -21,6 +23,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   const searchClearBtn = document.getElementById("search-clear");
 
   const settings = await getSettings();
+  themeApi.applyUserTheme(settings.user);
 
   if (!settings.token) {
     tagsList.hidden = true;
@@ -34,6 +37,14 @@ document.addEventListener("DOMContentLoaded", async () => {
     apiBaseUrl: settings.apiBaseUrl,
     token: settings.token,
   });
+
+  // The sidebar can be open for a long time without the popup ever running, so
+  // pick up a theme changed on the website since the cached user was stored.
+  // Non-blocking: bookmark loading below shouldn't wait on it.
+  client
+    .getCurrentUser()
+    .then((response) => themeApi.applyUserTheme(response.user))
+    .catch(() => {});
 
   const refreshBtn = document.getElementById("refresh-btn");
 

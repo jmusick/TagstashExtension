@@ -9,6 +9,7 @@ A Firefox WebExtension that saves the active tab to your [Tagstash](https://tags
 - Optionally fetches page title and description from the Tagstash metadata endpoint
 - Saves the page as a bookmark with comma-separated tags
 - Displays a sidebar panel with your bookmarks organized by tags
+- Matches the Slate / Midnight / Light theme you picked on tagsta.sh
 - Edit, search, and manage bookmarks directly from the sidebar
 
 ## Installation
@@ -32,6 +33,11 @@ Or load it temporarily for development (see below).
 - Sort by count or alphabetically
 - Responsive to session changes (auto-refresh on login)
 
+### Theming
+- Popup, sidebar, and settings follow the theme saved on your Tagstash account (Slate, Midnight, or Light)
+- Change the theme on tagsta.sh and the extension picks it up the next time it talks to the API
+- Signed out, it follows your browser's light/dark preference
+
 ## Configuration
 
 By default the extension points to `https://tagsta.sh/api`. The API base URL can be changed in **Settings** (gear icon) if needed, e.g. for local development.
@@ -42,7 +48,9 @@ By default the extension points to `https://tagsta.sh/api`. The API base URL can
 - `popup.html`, `popup.css`, `popup.js` - Extension popup UI and logic
 - `sidebar.html`, `sidebar.css`, `sidebar.js` - Sidebar panel UI and logic
 - `options.html`, `options.css`, `options.js` - Extension settings page
+- `theme.css` - Shared Slate/Midnight/Light color tokens for all pages
 - `lib/storage.js` - Local extension storage helpers
+- `lib/theme.js` - Resolves and applies the account's theme (classic script, loaded in each page's `<head>`)
 - `lib/tagstash-client.js` - Minimal API client for Tagstash
 
 ## Load temporarily in Firefox (development)

@@ -2,6 +2,8 @@ import { createTagstashClient } from './lib/tagstash-client.js';
 import { getSettings, saveSession, clearSession } from './lib/storage.js';
 
 const browserApi = globalThis.browser ?? globalThis.chrome;
+// Set up by lib/theme.js, loaded as a classic script in popup.html's <head>.
+const themeApi = globalThis.tagstashTheme;
 
 const elements = {
   authView: document.getElementById('authView'),
@@ -216,6 +218,7 @@ async function restoreSession() {
   state.apiBaseUrl = settings.apiBaseUrl;
   state.token = settings.token;
   state.user = settings.user;
+  themeApi.applyUserTheme(state.user);
 
   if (!state.token) {
     toggleView(false);
@@ -225,6 +228,7 @@ async function restoreSession() {
   try {
     const response = await getClient().getCurrentUser();
     state.user = response.user;
+    themeApi.applyUserTheme(response.user);
     elements.userLabel.textContent = response.user.username;
     toggleView(true);
   } catch {
@@ -250,6 +254,7 @@ async function handleLogin(event) {
     state.token = response.token;
     state.user = response.user;
     await saveSession(response.token, response.user);
+    themeApi.applyUserTheme(response.user);
     elements.userLabel.textContent = response.user.username;
     elements.password.value = '';
     toggleView(true);

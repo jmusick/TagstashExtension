@@ -1,28 +1,3 @@
-:root {
-  color-scheme: dark;
-  --bg: #090914;
-  --panel: rgba(20, 20, 43, 0.86);
-  --panel-strong: #161631;
-  --panel-border: rgba(180, 168, 255, 0.34);
-  --field-bg: rgba(139, 109, 255, 0.08);
-  --field-border: rgba(180, 168, 255, 0.34);
-  --text: #f2efff;
-  --muted: rgba(242, 239, 255, 0.56);
-  --accent: #6d45ff;
-  --accent-hover: #7d5dff;
-  --accent-secondary: #8b6dff;
-  --accent-secondary-border: rgba(180, 168, 255, 0.34);
-  --focus-shadow: rgba(92, 49, 245, 0.2);
-  --success-bg: rgba(103, 215, 162, 0.14);
-  --success-text: #67d7a2;
-  --success-border: rgba(103, 215, 162, 0.3);
-  --error-bg: rgba(255, 95, 123, 0.14);
-  --error-text: #ff8f9e;
-  --error-border: rgba(255, 143, 158, 0.34);
-  --shadow: 0 14px 42px rgba(0, 0, 0, 0.34);
-  font-family: 'Nunito', 'Segoe UI', system-ui, -apple-system, sans-serif;
-}
-
 * {
   box-sizing: border-box;
 }
@@ -32,7 +7,7 @@ body {
   width: 360px;
   min-width: 360px;
   overflow-x: hidden;
-  background: radial-gradient(circle at top, rgba(109, 69, 255, 0.2), transparent 32%), linear-gradient(180deg, #0f1024 0%, #090914 100%);
+  background: var(--page-gradient);
   color: var(--text);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -68,7 +43,7 @@ body {
   font-size: 1.4rem;
   line-height: 1;
   font-weight: 800;
-  background: linear-gradient(90deg, #8b6dff, #c4b4ff);
+  background: var(--heading-gradient);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -145,7 +120,7 @@ textarea {
 
 input::placeholder,
 textarea::placeholder {
-  color: rgba(220, 224, 217, 0.4);
+  color: var(--placeholder);
 }
 
 input:focus,
@@ -157,7 +132,7 @@ textarea:focus {
 
 input::placeholder,
 textarea::placeholder {
-  color: rgba(242, 239, 255, 0.35);
+  color: var(--placeholder);
 }
 
 button {
@@ -165,7 +140,7 @@ button {
   border-radius: 8px;
   padding: 8px 14px;
   background: var(--accent);
-  color: white;
+  color: var(--on-accent);
   cursor: pointer;
   transition: background-color 0.25s, transform 120ms ease, opacity 120ms ease;
   font-weight: 600;
@@ -203,7 +178,7 @@ button:disabled {
 .ghost-button:hover {
   border-color: var(--accent-secondary);
   color: var(--text);
-  background: rgba(139, 109, 255, 0.1);
+  background: var(--surface-soft-hover);
 }
 
 .button-row {
@@ -249,8 +224,8 @@ button:disabled {
   display: inline-flex;
   align-items: center;
   gap: 5px;
-  background: linear-gradient(135deg, #5630f3 0%, #8b6dff 100%);
-  color: #fff;
+  background: var(--tag-gradient);
+  color: var(--on-accent);
   padding: 3px 8px;
   border-radius: 999px;
   font-size: 11px;
@@ -259,8 +234,8 @@ button:disabled {
 
 .tag-pill-remove {
   border: none;
-  background: rgba(255, 255, 255, 0.24);
-  color: #fff;
+  background: var(--pill-remove-bg);
+  color: var(--on-accent);
   width: 14px;
   height: 14px;
   padding: 0;
@@ -274,7 +249,7 @@ button:disabled {
 }
 
 .tag-pill-remove:hover {
-  background: rgba(255, 255, 255, 0.4);
+  background: var(--pill-remove-bg-hover);
 }
 
 .tag-input-suggestion {
@@ -355,7 +330,7 @@ button:disabled {
 
 .btn-field-action:hover {
   border-color: var(--accent-secondary);
-  color: #DCE0D9;
+  color: var(--text);
   background: transparent;
   transform: none;
 }
