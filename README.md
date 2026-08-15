@@ -31,6 +31,7 @@ Or load it temporarily for development (see below).
 - Edit bookmark details and tags directly
 - Mark bookmarks as favorites
 - Sort by count or alphabetically
+- Preferences cog for choosing whether bookmarks open in the current tab or a new tab (saved in this browser, separate from the website's own setting)
 - Responsive to session changes (auto-refresh on login)
 
 ### Theming

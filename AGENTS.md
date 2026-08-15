@@ -37,6 +37,14 @@ The extension has no theme picker. It renders whatever theme the signed-in user 
 - The palettes in `theme.css` are hand-copied from `Tagstash/src/index.css` (`:root`, `:root[data-theme='midnight']`, `:root[data-theme='light']`) with the extension's own token names. There's no shared stylesheet across the repos — if the web app's palette changes, update `theme.css` to match.
 - When adding CSS, **never hardcode a color** — every color, gradient, shadow, and overlay in `popup.css`/`sidebar.css`/`options.css` goes through a token, or it will look wrong in Light.
 
+## Sidebar preferences: extension-local, unlike the theme
+
+The sidebar's cog button (next to the refresh icon) toggles an inline `#prefs-panel` holding "Open bookmarks in: the current tab / a new tab". It's stored in `browser.storage.local` under `tagstash.openLinksInNewTab` via `saveOpenLinksInNewTab` in `lib/storage.js`, and it drives whether a bookmark click calls `browserApi.tabs.create` or `browserApi.tabs.update`. Default is **current tab** — the sidebar's original behavior.
+
+The website has its own "open links in" setting, but that one lives on the account (`users.link_target`). The two are intentionally independent: don't make the sidebar read `user.link_target`, even though `theme` works that way. Preference changes are picked up live through the existing `storage.onChanged` listener, so a second sidebar (or window) restyles without a reload — note that listener also reloads the whole page on token changes, so keep new keys out of that branch.
+
+The options page stays scoped to the API base URL. Saving there still calls `clearSession()` unconditionally, which is why sidebar-only preferences don't belong on that form.
+
 ## Auth
 
 `popup.js` logs in via `POST /auth/login` with email/password, stores the returned JWT + user object via `saveSession`, and every subsequent request attaches it as `Authorization: Bearer <token>`. Changing the configured API base URL in Settings clears the current session (`clearSession`) since the token is only valid for the instance that issued it.

@@ -1,5 +1,5 @@
 import { createTagstashClient } from './lib/tagstash-client.js';
-import { getSettings } from './lib/storage.js';
+import { getSettings, saveOpenLinksInNewTab, STORAGE_KEYS } from './lib/storage.js';
 
 const browserApi = globalThis.browser ?? globalThis.chrome;
 // Set up by lib/theme.js, loaded as a classic script in sidebar.html's <head>.
@@ -25,10 +25,50 @@ document.addEventListener("DOMContentLoaded", async () => {
   const settings = await getSettings();
   themeApi.applyUserTheme(settings.user);
 
+  // Extension-local preference, independent of the website's own
+  // new-tab/same-tab setting — the two never sync.
+  let openLinksInNewTab = settings.openLinksInNewTab;
+
+  const prefsBtn = document.getElementById("prefs-btn");
+  const prefsPanel = document.getElementById("prefs-panel");
+  const openLinksRadios = Array.from(document.querySelectorAll('input[name="openLinksTarget"]'));
+
+  function syncPrefsControls() {
+    openLinksRadios.forEach((radio) => {
+      radio.checked = (radio.value === "new") === openLinksInNewTab;
+    });
+  }
+
+  syncPrefsControls();
+
+  prefsBtn.addEventListener("click", () => {
+    const willOpen = prefsPanel.hidden;
+    prefsPanel.hidden = !willOpen;
+    prefsBtn.setAttribute("aria-expanded", String(willOpen));
+  });
+
+  openLinksRadios.forEach((radio) => {
+    radio.addEventListener("change", () => {
+      if (!radio.checked) return;
+      openLinksInNewTab = radio.value === "new";
+      saveOpenLinksInNewTab(openLinksInNewTab);
+    });
+  });
+
+  // Another sidebar instance (a second window) may change the same setting.
+  browserApi.storage.onChanged.addListener((changes, areaName) => {
+    if (areaName === 'local' && changes[STORAGE_KEYS.openLinksInNewTab]) {
+      openLinksInNewTab = Boolean(changes[STORAGE_KEYS.openLinksInNewTab].newValue);
+      syncPrefsControls();
+    }
+  });
+
   if (!settings.token) {
     tagsList.hidden = true;
     sortToggle.hidden = true;
     searchRow.hidden = true;
+    prefsBtn.hidden = true;
+    prefsPanel.hidden = true;
     notLoggedIn.hidden = false;
     return;
   }
@@ -241,7 +281,11 @@ document.addEventListener("DOMContentLoaded", async () => {
     link.rel = "noopener noreferrer";
     link.addEventListener("click", (e) => {
       e.preventDefault();
-      browser.tabs.update({ url: bookmark.url });
+      if (openLinksInNewTab) {
+        browserApi.tabs.create({ url: bookmark.url });
+      } else {
+        browserApi.tabs.update({ url: bookmark.url });
+      }
     });
     bookmarkItem.appendChild(link);
 

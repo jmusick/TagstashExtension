@@ -20,6 +20,21 @@
         <button class="sort-btn" data-sort="alpha">A–Z</button>
       </div>
       <button id="refresh-btn" class="refresh-btn" title="Refresh">↻</button>
+      <button id="prefs-btn" class="prefs-btn" type="button" title="Preferences" aria-label="Preferences" aria-expanded="false" aria-controls="prefs-panel">⚙</button>
+    </div>
+    <div id="prefs-panel" class="prefs-panel" hidden>
+      <fieldset class="prefs-group">
+        <legend>Open bookmarks in</legend>
+        <label class="prefs-choice">
+          <input type="radio" name="openLinksTarget" value="current" />
+          <span>The current tab</span>
+        </label>
+        <label class="prefs-choice">
+          <input type="radio" name="openLinksTarget" value="new" />
+          <span>A new tab</span>
+        </label>
+      </fieldset>
+      <p class="prefs-note">Saved in this browser. The Tagstash website has its own separate setting.</p>
     </div>
     <div id="sidebar-search" class="sidebar-search">
       <input id="search-input" type="text" placeholder="Search bookmarks" autocomplete="off" />
