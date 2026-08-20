@@ -333,8 +333,12 @@ document.addEventListener("DOMContentLoaded", async () => {
     tagCount.textContent = tag.count;
     header.appendChild(tagCount);
 
+    const bookmarksCollapse = document.createElement("div");
+    bookmarksCollapse.classList.add("bookmarks-collapse");
+
     const bookmarksList = document.createElement("ul");
     bookmarksList.classList.add("bookmarks-list");
+    bookmarksCollapse.appendChild(bookmarksList);
 
     const tagBookmarks = (bookmarksByTag.get(tag.name) || [])
       .slice()
@@ -362,7 +366,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
 
     tagItem.appendChild(header);
-    tagItem.appendChild(bookmarksList);
+    tagItem.appendChild(bookmarksCollapse);
     return tagItem;
   }
 
@@ -395,8 +399,12 @@ document.addEventListener("DOMContentLoaded", async () => {
     count.textContent = starredBookmarks.length;
     header.appendChild(count);
 
+    const collapse = document.createElement("div");
+    collapse.classList.add("bookmarks-collapse");
+
     const list = document.createElement("ul");
     list.classList.add("bookmarks-list");
+    collapse.appendChild(list);
 
     for (const bookmark of starredBookmarks) {
       list.appendChild(buildBookmarkItem(bookmark));
@@ -421,7 +429,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
 
     item.appendChild(header);
-    item.appendChild(list);
+    item.appendChild(collapse);
     return item;
   }
 

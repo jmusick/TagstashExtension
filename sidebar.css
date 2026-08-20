@@ -238,7 +238,6 @@ body {
 }
 
 .bookmarks-list.bookmarks-list--flat {
-  max-height: none;
   overflow: visible;
   padding: 2px 2px 6px 2px;
 }
@@ -334,21 +333,38 @@ body {
   flex-shrink: 0;
 }
 
-/* Bookmarks list inside a tag */
+/* Bookmarks list inside a tag.
+   The collapse animates grid-template-rows 0fr -> 1fr so the open height is the
+   list's natural height -- no max-height cap that would clip long tags. */
+.bookmarks-collapse {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.15s ease;
+}
+
+.tag-folder.open .bookmarks-collapse {
+  grid-template-rows: 1fr;
+}
+
+/* Horizontal padding only: this is the grid item, and its vertical padding would
+   sit outside the clipped content box and leak height while collapsed. Top/bottom
+   spacing goes on the items instead, where the 0fr track clips it. */
 .bookmarks-list {
   list-style: none;
   padding: 0 6px;
   display: flex;
   flex-direction: column;
   gap: 1px;
-  max-height: 0;
+  min-height: 0;
   overflow: hidden;
-  transition: max-height 0.15s ease, padding 0.15s ease;
 }
 
-.tag-folder.open .bookmarks-list {
-  max-height: 600px;
-  padding: 4px 6px 6px 6px;
+.bookmarks-list:not(.bookmarks-list--flat) > .bookmark-item:first-child {
+  margin-top: 4px;
+}
+
+.bookmarks-list:not(.bookmarks-list--flat) > .bookmark-item:last-child {
+  margin-bottom: 6px;
 }
 
 .bookmark-item {
