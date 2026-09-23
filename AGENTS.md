@@ -49,6 +49,8 @@ The options page stays scoped to the API base URL. Saving there still calls `cle
 
 `popup.js` logs in via `POST /auth/login` with email/password, stores the returned JWT + user object via `saveSession`, and every subsequent request attaches it as `Authorization: Bearer <token>`. Changing the configured API base URL in Settings clears the current session (`clearSession`) since the token is only valid for the instance that issued it.
 
+Tokens can be revoked server-side before they expire: changing or resetting the password on the website signs out every session, including the extension's. The API answers a rejected token with 401/403, and `lib/tagstash-client.js` puts the HTTP status on the errors it throws (`error.status`) so callers can tell auth failures apart with `isAuthError`. The popup clears the session whenever `/auth/me` fails on open. The sidebar clears it only on an auth error (`handleAuthFailure`), and the token listener then reloads it into the signed-out state. Network errors and other failures keep the session and show the usual "try again" message.
+
 ## Release process
 
 `manifest.json`'s `version` field is the source of truth for the extension version. Pushing a `v*` git tag triggers `.github/workflows/release.yml`, which zips the repo (excluding `.git`, `.github`, `README.md`, and any `*.zip`) and publishes it as a GitHub Release — it does **not** read or validate `manifest.json`'s version against the tag, so bump `manifest.json` and tag in the same change to avoid a mismatch between the release name and the shipped manifest.

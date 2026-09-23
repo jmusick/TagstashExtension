@@ -1,5 +1,5 @@
-import { createTagstashClient } from './lib/tagstash-client.js';
-import { getSettings, saveOpenLinksInNewTab, STORAGE_KEYS } from './lib/storage.js';
+import { createTagstashClient, isAuthError } from './lib/tagstash-client.js';
+import { clearSession, getSettings, saveOpenLinksInNewTab, STORAGE_KEYS } from './lib/storage.js';
 
 const browserApi = globalThis.browser ?? globalThis.chrome;
 // Set up by lib/theme.js, loaded as a classic script in sidebar.html's <head>.
@@ -78,13 +78,22 @@ document.addEventListener("DOMContentLoaded", async () => {
     token: settings.token,
   });
 
+  // A rejected token (expired, or revoked by a password change or reset on the website)
+  // won't start working on retry. Drop the stored session instead; the token listener at
+  // the top of this file then reloads the sidebar into its signed-out state.
+  async function handleAuthFailure(error) {
+    if (!isAuthError(error)) return false;
+    await clearSession();
+    return true;
+  }
+
   // The sidebar can be open for a long time without the popup ever running, so
   // pick up a theme changed on the website since the cached user was stored.
   // Non-blocking: bookmark loading below shouldn't wait on it.
   client
     .getCurrentUser()
     .then((response) => themeApi.applyUserTheme(response.user))
-    .catch(() => {});
+    .catch(handleAuthFailure);
 
   const refreshBtn = document.getElementById("refresh-btn");
 
@@ -568,6 +577,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
       renderTags();
     } catch (error) {
+      if (await handleAuthFailure(error)) return;
       console.error("Error loading Tagstash data:", error);
       tagsList.innerHTML = '<li class="empty-state">Failed to load tags. Please try again.</li>';
     } finally {
