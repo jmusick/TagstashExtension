@@ -137,7 +137,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     editTagPillsEl.innerHTML = '';
     editTagList.forEach((tag, index) => {
       const pill = document.createElement('span');
-      pill.className = 'edit-tag-pill';
+      pill.className = 'edit-tag-pill tag-stock';
 
       const text = document.createElement('span');
       text.textContent = tag;
@@ -333,8 +333,11 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
     const tagLabel = document.createElement("span");
-    tagLabel.classList.add("tag-label");
-    tagLabel.textContent = tag.name;
+    tagLabel.classList.add("tag-label", "tag-stock");
+    const labelText = document.createElement('span');
+    labelText.className = 'tag-label-text';
+    labelText.textContent = tag.name;
+    tagLabel.appendChild(labelText);
     header.appendChild(tagLabel);
 
     const tagCount = document.createElement("span");

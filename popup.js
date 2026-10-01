@@ -100,13 +100,11 @@ function normalizeBookmarkUrl(value) {
   }
   if (!normalized) return '';
 
-  // A trailing slash on a bare root path (no deeper path/query/hash) is purely
-  // cosmetic, so drop it for a consistent stored form regardless of where the
-  // URL was copied from (e.g. Firefox's address bar always includes it).
+  // Keep a trailing slash on bare roots, including URLs produced by Base URL.
   try {
     const parsed = new URL(normalized);
     if (parsed.pathname === '/' && !parsed.search && !parsed.hash) {
-      return parsed.origin;
+      return `${parsed.origin}/`;
     }
   } catch {}
 
@@ -128,7 +126,7 @@ function renderTagPills() {
 
   state.tagList.forEach((tag, index) => {
     const pill = document.createElement('span');
-    pill.className = 'tag-pill';
+    pill.className = 'tag-pill tag-stock';
 
     const text = document.createElement('span');
     text.textContent = tag;
@@ -350,7 +348,7 @@ async function handleFetchDescription() {
 function handleBaseUrl() {
   try {
     const u = new URL(normalizeBookmarkUrl(elements.bookmarkUrl.value));
-    elements.bookmarkUrl.value = u.origin;
+    elements.bookmarkUrl.value = `${u.origin}/`;
   } catch {}
 }
 

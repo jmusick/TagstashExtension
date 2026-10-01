@@ -24,6 +24,7 @@ Or load it temporarily for development (see below).
 - Quick save of the active tab as a bookmark
 - Add tags and description
 - Auto-fetch page title and description
+- Base URL keeps the site root with a trailing slash (for example, `https://www.google.com/`); Trim URL removes queries and fragments
 
 ### Sidebar
 - Browse all your bookmarks organized by tags
@@ -38,6 +39,7 @@ Or load it temporarily for development (see below).
 - Popup, sidebar, and settings follow the theme saved on your Tagstash account (Slate, Midnight, or Light)
 - Change the theme on tagsta.sh and the extension picks it up the next time it talks to the API
 - Signed out, it follows your browser's light/dark preference
+- Matches the refreshed site's Archivo typography, flat surfaces, and shipping-tag shapes; the font is bundled locally
 
 ## Configuration
 
@@ -50,6 +52,7 @@ By default the extension points to `https://tagsta.sh/api`. The API base URL can
 - `sidebar.html`, `sidebar.css`, `sidebar.js` - Sidebar panel UI and logic
 - `options.html`, `options.css`, `options.js` - Extension settings page
 - `theme.css` - Shared Slate/Midnight/Light color tokens for all pages
+- `fonts/` - Bundled Archivo variable font and its SIL Open Font License
 - `lib/storage.js` - Local extension storage helpers
 - `lib/theme.js` - Resolves and applies the account's theme (classic script, loaded in each page's `<head>`)
 - `lib/tagstash-client.js` - Minimal API client for Tagstash

@@ -4,9 +4,6 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Tagstash</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="theme.css" />
     <link rel="stylesheet" href="popup.css" />
     <script src="lib/theme.js"></script>
@@ -14,7 +11,7 @@
   <body>
     <main class="popup-shell">
       <header class="hero">
-        <h1>Tagstash</h1>
+        <a class="brand-link" href="https://tagsta.sh/" target="_blank" rel="noopener noreferrer"><h1 class="brand-lockup"><img src="icons/icon-48.png" width="28" height="28" alt=""><span>Tagstash</span></h1></a>
         <p class="hero-copy">Save the current tab into your local Tagstash library without leaving the page.</p>
       </header>
 
@@ -75,7 +72,7 @@
                   <button id="baseUrlButton" class="btn-field-action" type="button">Base URL</button>
                   <span class="action-info-inline" aria-hidden="true">
                     i
-                    <span class="action-info-tooltip" role="tooltip">Keeps only the site root (protocol + domain), removing all path and query parts. Example: https://example.com/docs/page?ref=nav becomes https://example.com.</span>
+                    <span class="action-info-tooltip" role="tooltip">Keeps only the site root (protocol + domain), removing all path and query parts. Example: https://example.com/docs/page?ref=nav becomes https://example.com/.</span>
                   </span>
                 </span>
                 <span class="field-action-wrap">

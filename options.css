@@ -38,10 +38,7 @@ h1 {
   margin: 8px 0 10px;
   font-size: 2rem;
   font-weight: 800;
-  background: var(--heading-gradient);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: var(--text);
 }
 
 .intro {
@@ -94,7 +91,7 @@ button {
   border-radius: 8px;
   padding: 9px 20px;
   background: var(--accent);
-  color: white;
+  color: var(--on-accent);
   cursor: pointer;
   font-weight: 600;
   transition: background-color 0.25s, transform 120ms ease;

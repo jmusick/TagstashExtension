@@ -21,7 +21,7 @@ body {
 .hero {
   margin-bottom: 6px;
   padding-bottom: 4px;
-  border-bottom: 2px solid var(--accent-secondary-border);
+  border-bottom: 1px solid var(--panel-border);
 }
 
 .eyebrow,
@@ -43,10 +43,7 @@ body {
   font-size: 1.4rem;
   line-height: 1;
   font-weight: 800;
-  background: var(--heading-gradient);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: var(--text);
 }
 
 .hero-copy {
@@ -57,7 +54,7 @@ body {
 .message {
   background: var(--panel);
   border: 1px solid var(--panel-border);
-  border-radius: 16px;
+  border-radius: 14px;
   box-shadow: var(--shadow);
 }
 
@@ -220,22 +217,10 @@ button:disabled {
   display: contents;
 }
 
-.tag-pill {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  background: var(--tag-gradient);
-  color: var(--on-accent);
-  padding: 3px 8px;
-  border-radius: 999px;
-  font-size: 11px;
-  font-weight: 700;
-}
-
 .tag-pill-remove {
   border: none;
   background: var(--pill-remove-bg);
-  color: var(--on-accent);
+  color: inherit;
   width: 14px;
   height: 14px;
   padding: 0;
@@ -432,7 +417,7 @@ button:disabled {
 .popup-footer {
   margin-top: 10px;
   padding-top: 8px;
-  border-top: 1px solid var(--accent-secondary-border);
+  border-top: 1px solid var(--panel-border);
   text-align: center;
 }
 
@@ -448,4 +433,9 @@ button:disabled {
 .popup-footer a:hover {
   opacity: 1;
   color: var(--accent-secondary);
+}
+
+.panel-heading h2 {
+  font-size: 1.1rem;
+  line-height: 1.2;
 }
